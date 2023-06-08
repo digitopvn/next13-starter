@@ -33,13 +33,28 @@ public/sitemap-*.xml
 *.pem
 Thumbs.db
 
+# diginext
+.fw/
+optimizer/node_modules/
+optimizer/yarn.lock
+
 # debug
 npm-debug.log*
-pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.yarn
+.yarnrc
+.yarnrc.yml
+.yarn-integrity
+yarn.lock
+.pnp.cjs
+.pnp.loader.mjs
+package-lock.json
+pnpm-lock.yaml
+
 
 # dotenv local files
+.env
 .env*.local
 
 # local folder
@@ -47,3 +62,25 @@ local
 
 # vercel
 .vercel
+
+
+# Storage
+storage
+public/uploads
+
+/public.__image-compressed__
+/log
+.temp
+.temp*
+
+# Deployment
+deployment/deployment_dev1.yml
+deployment/deployment_dev1.yaml
+
+# build & release framework
+gcloud-service-account.json
+
+*-compressed_image
+
+public/assets/*-webp/
+public/assets/*-thumb-webp/
