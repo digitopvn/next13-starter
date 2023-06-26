@@ -2,14 +2,14 @@
 #       PHASE 1 - BUILDER
 # ===================================
 
-FROM node:18-alpine AS BUILD_IMAGE
+FROM node:18 AS BUILD_IMAGE
 
 ENV NODE_OPTIONS=--max_old_space_size=8192
 
 # Because ALPINE base image don't have python pre-installed 
-RUN apk update && apk add bash curl python3 make g++ && rm -rf /var/cache/apk/*
+# RUN apk update && apk add bash curl python3 make g++ && rm -rf /var/cache/apk/*
 
-WORKDIR /usr/app
+WORKDIR /usr/src
 
 COPY ./package.json ./package.json
 
@@ -19,7 +19,7 @@ RUN pnpm i diginext-utils
 
 # apps
 COPY . .
-COPY /.env.prod ./.env
+COPY ./.env.prod ./.env
 
 RUN rm -rf ./src/pages/examples
 RUN rm -rf ./src/pages/components
@@ -40,21 +40,21 @@ RUN /usr/local/bin/node-prune
 
 FROM node:18-alpine AS RUNNER
 
-WORKDIR /usr/app
-
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
+WORKDIR /usr/app
+
 # Only copy build files & neccessary files to run:
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/next.config.js .
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/.next/standalone .
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/.next/static ./.next/static
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/public ./public
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/node_modules ./node_modules
-# COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/next-i18next.config.js .
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/app/.env .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next.config.js .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.next/standalone .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.next/static ./.next/static
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/public ./public
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/node_modules ./node_modules
+# COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next-i18next.config.js .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.env .
 
 EXPOSE 3000 80
 

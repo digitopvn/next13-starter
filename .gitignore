@@ -82,5 +82,5 @@ gcloud-service-account.json
 
 *-compressed_image
 
-public/assets/*-webp/
-public/assets/*-thumb-webp/
+public/**/*-webp/
+public/**/*-thumb-webp/
