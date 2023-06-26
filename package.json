@@ -1,6 +1,6 @@
 {
 	"name": "diginext13",
-	"version": "3.7.0",
+	"version": "3.7.1",
 	"scripts": {
 		"dev": "npm run clean && npm run img && node server.dev",
 		"build": "npm run clean && next build",
