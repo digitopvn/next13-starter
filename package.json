@@ -28,6 +28,11 @@
         "set-permission:default": "chmod -x ./.husky -R",
         "postbuild": "next-sitemap"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run check-secret && npm run format"
+        }
+    },
     "dependencies": {
         "@ant-design/icons": "^5.1.4",
         "@react-spring/web": "^9.7.3",
