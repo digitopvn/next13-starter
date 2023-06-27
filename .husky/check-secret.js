@@ -54,13 +54,8 @@ const checkPrivateKey = async (params) => {
 
 	let result = true;
 
-	const _gitPath = (
-		await new Promise((resolve, reject) => {
-			runCommand("git rev-parse --show-toplevel", async function (e) {
-				resolve(e);
-			});
-		})
-	)
+	const _gitPath = (await run("git rev-parse --show-toplevel"))
+		//
 		.split("\n")
 		.filter((x) => x)[0];
 
@@ -80,25 +75,13 @@ const checkPrivateKey = async (params) => {
 		status: result,
 		list: _list,
 	};
-	// for (let i = 0; i < arr.length; i++) {
-	// 	const element = arr[i];
-	// }
 };
 
 (async () => {
-	// const chalk = (await import("chalk")).default;
-
 	const result = await checkPrivateKey();
-	// console.log("result :>> ", result);
-	// console.log(chalk.yellow("FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT"));
-	// console.log(result);
 
 	if (result.status) {
 	} else {
-		throw new Error(`FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT!\n${JSON.stringify(result)}`);
-
-		// console.log(chalk.yellow("FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT"));
-		// console.log(result);
-		return;
+		throw new Error(`FOUND PRIVATE KEY OR SECRET IN ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT!\n\n${JSON.stringify(result)}\n\n`);
 	}
 })();
