@@ -3,6 +3,3 @@
 
 # Disable concurent to run `check-types` after ESLint in lint-staged
 npx lint-staged --concurrent false
-
-npx run check-secret
-npx run format
