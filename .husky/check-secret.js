@@ -99,3 +99,5 @@ const checkPrivateKey = async (params) => {
 		return;
 	}
 })();
+
+console.log("1");
