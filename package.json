@@ -30,7 +30,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "echo 1"
+            "pre-commit": "echo 1123123123"
         }
     },
     "dependencies": {
