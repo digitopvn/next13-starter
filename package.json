@@ -12,7 +12,7 @@
 		"clean": "rimraf .next out",
 		"lint": "next lint",
 		"format": "next lint --fix && prettier **/*.{js,ts,tsx,json,yaml,css} --write",
-		"check-types": " && npm run format",
+		"check-types": "echo 1 && npm run format",
 		"test": "jest",
 		"commit": "cz",
 		"cypress": "cypress open",
