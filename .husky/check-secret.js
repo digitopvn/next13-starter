@@ -90,7 +90,6 @@ const checkPrivateKey = async (params) => {
 
 	const result = await checkPrivateKey();
 	console.log("result :>> ", result);
-	throw new Error(1);
 
 	if (result.status) {
 	} else {

@@ -10,6 +10,7 @@
 		"export": "next export",
 		"build-prod": "run-s clean build export",
 		"clean": "echo clean && rimraf .next out",
+		"check-secret": "node .husky/check-secret.js",
 		"lint": "echo lint && next lint",
 		"format": "echo format && next lint --fix && prettier **/*.{js,ts,tsx,json,yaml,css} --write",
 		"check-types": "echo types && npm run format",
