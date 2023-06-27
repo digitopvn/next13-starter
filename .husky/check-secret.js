@@ -86,17 +86,19 @@ const checkPrivateKey = async (params) => {
 };
 
 (async () => {
-	const chalk = (await import("chalk")).default;
+	// const chalk = (await import("chalk")).default;
 
 	const result = await checkPrivateKey();
-	console.log("result :>> ", result);
+	// console.log("result :>> ", result);
+	// console.log(chalk.yellow("FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT"));
+	// console.log(result);
 
 	if (result.status) {
 	} else {
-		console.log(chalk.yellow("FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT"));
-		console.log(result);
+		throw new Error(`FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT!\n${JSON.stringify(result)}`);
+
+		// console.log(chalk.yellow("FOUND PRIVATE KEY OR SECRET ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT"));
+		// console.log(result);
 		return;
 	}
 })();
-
-console.log("1");
