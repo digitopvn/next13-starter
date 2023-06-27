@@ -28,11 +28,6 @@
         "set-permission:default": "chmod -x ./.husky -R",
         "postbuild": "next-sitemap"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "echo 1123123123"
-        }
-    },
     "dependencies": {
         "@ant-design/icons": "^5.1.4",
         "@react-spring/web": "^9.7.3",
