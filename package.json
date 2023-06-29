@@ -24,8 +24,8 @@
         "img": "towebp -d public/assets/images",
         "set-permission": "run-script-os",
         "set-permission:win32": "",
-        "set-permission:darwin:linux": "chmod -x ./.husky -R",
-        "set-permission:default": "chmod -x ./.husky -R",
+        "set-permission:darwin:linux": "chmod -R +x ./.husky",
+        "set-permission:default": "chmod -R +x ./.husky",
         "postbuild": "next-sitemap"
     },
     "dependencies": {
