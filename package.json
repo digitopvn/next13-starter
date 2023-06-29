@@ -1,6 +1,6 @@
 {
 	"name": "diginext13",
-	"version": "3.8.3",
+	"version": "3.8.4",
 	"scripts": {
 		"dev": "npm run set-permission && npm run clean && npm run img && node server.dev",
 		"build": "npm run clean && next build",
