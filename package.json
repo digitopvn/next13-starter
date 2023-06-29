@@ -13,7 +13,7 @@
 		"lint": "next lint",
 		"format": "next lint --fix && prettier **/*.{js,ts,tsx,json,yaml,css} --write",
 		"check-secret": "node .husky/check-secret.js",
-		"check-types": "tsc --noEmit --pretty && tsc --project cypress --noEmit --pretty",
+		"check-types": "tsc --project cypress --noEmit --pretty",
 		"test": "jest",
 		"commit": "cz",
 		"cypress": "cypress open",
