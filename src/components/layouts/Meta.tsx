@@ -34,12 +34,19 @@ const Meta = (props: IMetaProps) => {
 
 				{process.env.NEXT_PUBLIC_FB_APP_ID && <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FB_APP_ID} />}
 
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+				<link rel="apple-touch-icon" href="/images-webp/ios-test.webp" />
+				<link rel="apple-touch-startup-image" href="/images-webp/ios-test.webp" />
+
 				<link rel="shortcut icon" href={`${router.basePath}/favicon.ico`} />
+
 				<link rel="shortcut apple-touch-icon" sizes="180x180" href={`${router.basePath}/apple-touch-icon.png`} />
 				<link rel="shortcut icon" type="image/webp" sizes="32x32" href={`${router.basePath}/favicon-32x32.webp`} />
 				<link rel="shortcut icon" type="image/webp" sizes="16x16" href={`${router.basePath}/favicon-16x16.webp`} />
 
-				<meta name="viewport" content="width=device-width, initial-scale=1.0" key="viewport" />
+				<meta name="viewport" key="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 			</Head>
 
 			<NextSeo
