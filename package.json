@@ -15,7 +15,7 @@
 		"check-secret": "node .husky/check-secret.js",
 		"check-types": "tsc --project cypress --noEmit --pretty",
 		"test": "jest",
-		"commit": "cz",
+		"commit": "git add . && cz && git push origin",
 		"cypress": "cypress open",
 		"cypress:headless": "cypress run",
 		"e2e": "start-server-and-test dev http://localhost:3000 cypress",
