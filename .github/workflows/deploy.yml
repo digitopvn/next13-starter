@@ -69,7 +69,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfile.base
+          file: Dockerfile.prod
           push: true
           tags: digitop/next-js-starter:latest,digitop/next-js-starter:v1
           platforms: |
