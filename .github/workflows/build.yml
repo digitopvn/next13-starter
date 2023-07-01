@@ -12,8 +12,8 @@ on:
     #   - "!prerelease"   # exclude "prerelease"
 
 # ENVIRONMENT VARIABLES
-env:
-  NODE_ENV: production
+# env:
+#   NODE_ENV: production
 
 # CI/CD STEPS
 jobs:
