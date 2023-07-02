@@ -6,7 +6,12 @@ interface IUIHome {
 }
 
 const UIHome = (props: IUIHome) => {
-	return <>{props.children}</>;
+	return (
+		<div className="p-8">
+			<h1 className="text-2xl">👋 Hello, World!</h1>
+			{props.children}
+		</div>
+	);
 };
 
 UIHome.propTypes = {};
