@@ -119,6 +119,8 @@ jobs:
           tags: digitop/next-js-starter:latest,digitop/next-js-starter:v1
           platforms: |
             linux/amd64
-            linux/arm64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+#           platforms: |
+#             linux/amd64
+#             linux/arm64
+          cache-from: type=registry,digitop/next-js-starter:latest
+          cache-to: type=registry,digitop/next-js-starter:latest,mode=max
