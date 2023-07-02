@@ -2,13 +2,13 @@
 	"name": "diginext13",
 	"version": "3.8.5",
 	"scripts": {
-		"dev": "pnpm set-permission && pnpm clean && pnpm img && node server.dev",
-		"build": "pnpm clean && next build",
+		"dev": "npm run set-permission && npm run clean && npm run img && node server.dev",
+		"build": "npm run clean && next build",
 		"start": "node ./server.js",
 		"serve": "serve ./out",
-		"build-stats": "cross-env ANALYZE=true pnpm build",
+		"build-stats": "cross-env ANALYZE=true npm run build",
 		"export": "next export",
-		"build-prod": "pnpm clean && pnpm build && pnpm export",
+		"build-prod": "npm run clean && npm run build && npm run export",
 		"clean": "rimraf .next out",
 		"lint": "next lint",
 		"format": "next lint --fix && prettier **/*.{js,ts,tsx,json,yaml,css} --write",
@@ -109,7 +109,7 @@
 		"typescript": "5.0.4"
 	},
 	"engines": {
-		"pnpm": ">=8.0.0",
+		"npm": ">=8.0.0",
 		"node": ">=16.0.0"
 	},
 	"config": {

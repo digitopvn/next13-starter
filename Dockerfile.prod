@@ -13,9 +13,9 @@ WORKDIR /usr/src
 
 COPY ./package.json ./package.json
 
-RUN npm i pnpm -g
+# RUN npm i pnpm -g
 
-RUN pnpm i diginext-utils
+# RUN pnpm i diginext-utils
 
 # apps
 COPY . .
@@ -25,7 +25,7 @@ RUN rm -rf ./src/pages/examples
 RUN rm -rf ./src/pages/components
 
 # Start building
-RUN npm run img
+# RUN npm run img
 RUN npm run build
 
 # install node-prune (https://github.com/tj/node-prune)
