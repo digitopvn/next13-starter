@@ -22,8 +22,7 @@ COPY . .
 COPY ./.env.dev ./.env
 
 # Start building
-RUN npm run img
-RUN npm run build
+RUN npm run build-all
 
 # install node-prune (https://github.com/tj/node-prune)
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
