@@ -1,6 +1,6 @@
 {
 	"name": "diginext13",
-	"version": "3.8.5",
+	"version": "3.8.6",
 	"scripts": {
 		"dev": "npm run clean && npm exec npm-run-all --parallel set-permission img node-server-dev",
 		"node-server-dev": "node server.dev",
