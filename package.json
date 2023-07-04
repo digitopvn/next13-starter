@@ -2,7 +2,7 @@
 	"name": "diginext13",
 	"version": "3.8.6",
 	"scripts": {
-		"dev": "npm run clean && npm exec npm-run-all --parallel set-permission img node-server-dev",
+		"dev": "npm run clean && npm-run-all --parallel set-permission img node-server-dev",
 		"node-server-dev": "node server.dev",
 		"build": "npm exec npm-run-all --sequential clean build-next",
 		"build-all": "npm exec npm-run-all --sequential clean img build-next",
