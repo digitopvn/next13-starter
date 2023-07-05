@@ -67,5 +67,4 @@ const chinh_sach_bao_mat = () => {
 	);
 };
 
-chinh_sach_bao_mat.propTypes = {};
 export default chinh_sach_bao_mat;

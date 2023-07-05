@@ -45,6 +45,4 @@ const QrUrl = () => {
 	return <>{main}</>;
 };
 
-QrUrl.propTypes = {};
-
 export default QrUrl;
