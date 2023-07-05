@@ -2,7 +2,7 @@
 	"name": "diginext13",
 	"version": "3.8.7",
 	"scripts": {
-		"dev": "npm run clean && npm-run-all --parallel set-permission img node-server-dev",
+		"dev": "npm run clean && concurrently \"npm run set-permission\" \"npm run img\" \"npm run node-server-dev\"",
 		"node-server-dev": "node server.dev",
 		"build": "npm exec npm-run-all --sequential clean build-next",
 		"build-all": "npm exec npm-run-all --sequential clean img build-next",
@@ -75,6 +75,7 @@
 		"@typescript-eslint/parser": "^5.60.1",
 		"autoprefixer": "^10.4.14",
 		"commitizen": "^4.3.0",
+		"concurrently": "^8.2.0",
 		"cross-env": "^7.0.3",
 		"cssnano": "^6.0.1",
 		"cypress": "^12.16.0",
