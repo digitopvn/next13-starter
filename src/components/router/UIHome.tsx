@@ -9,6 +9,4 @@ const UIHome = (props: IUIHome) => {
 	return <>{props.children}</>;
 };
 
-UIHome.propTypes = {};
-
 export default UIHome;

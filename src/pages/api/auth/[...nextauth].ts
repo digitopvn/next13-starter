@@ -122,7 +122,7 @@ export default NextAuth({
 			id: "login-fb",
 			clientId: process.env.FACEBOOK_CLIENT_ID as string,
 			clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-			authorization: "https://www.facebook.com/v15.0/dialog/oauth?scope=email",
+			authorization: "https://www.facebook.com/v17.0/dialog/oauth?scope=email",
 			token: "https://graph.facebook.com/oauth/access_token",
 			userinfo: {
 				url: "https://graph.facebook.com/me",
@@ -130,7 +130,6 @@ export default NextAuth({
 				async request({ tokens, client, provider }) {
 					const clientSide = await client.userinfo(tokens.access_token as any, {
 						// @ts-expect-error
-
 						params: provider.userinfo?.params,
 					});
 
@@ -144,7 +143,6 @@ export default NextAuth({
 					});
 
 					res.data = res.data || {};
-
 					const { token, refreshToken } = res.data;
 					// // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					if (token) {
@@ -156,23 +154,28 @@ export default NextAuth({
 							status: res.status,
 							...res.data,
 						};
+					} else {
+						console.log("error login/facebook:>> ", JSON.stringify(res));
 					}
 					return {
 						...clientSide,
 						step: "login-fail",
 						token,
 						refreshToken,
+						error: true,
+						response: res,
 						...res,
 					};
 				},
 			},
 			profile(profile) {
+				// console.log("profile :>> ", profile);
 				return {
 					...profile,
 					id: profile.id,
 					name: profile.name,
 					email: profile.email,
-					image: profile.picture.data.url,
+					// image: profile.picture.data.url,
 				};
 			},
 		}),
@@ -205,8 +208,9 @@ export default NextAuth({
 
 		async session({ session, token }) {
 			const { step, error, response } = token as any;
+
 			if (error) {
-				(session as any).error = error;
+				(session as any).error = true;
 				(session as any).response = response;
 				return session;
 			}
@@ -266,7 +270,6 @@ export default NextAuth({
 			}
 
 			delete (session as any).user;
-			console.log("🚀session----> final session", session);
 			return session;
 		},
 	},

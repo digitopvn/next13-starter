@@ -4,19 +4,30 @@ import { IsProd } from "@/modules/config/AppConfig";
 
 export const configProduction = {
 	consoleHandle: async (isShowCredit = true) => {
+		const { showCredit } = await import("diginext-utils/dist/xconsole");
+
 		if (IsProd()) {
-			const { disableConsole, showCredit } = await import("diginext-utils/dist/xconsole");
+			const { disableConsole } = await import("diginext-utils/dist/xconsole");
 
 			if (typeof window === "undefined") {
 				//
-			} else if (isShowCredit) {
+			} else {
+				console.clear();
+			}
+
+			if (isShowCredit) {
 				const { publicRuntimeConfig } = getConfig();
 				const { version } = publicRuntimeConfig;
-				console.clear();
 				showCredit(version);
 			}
 
 			disableConsole();
+		} else {
+			if (isShowCredit) {
+				const { publicRuntimeConfig } = getConfig();
+				const { version } = publicRuntimeConfig;
+				showCredit(version);
+			}
 		}
 	},
 };
