@@ -1,0 +1,18 @@
+{
+	"env": {
+		"development": {
+			"compact": false
+		}
+	},
+	"presets": [
+		[
+			"next/babel",
+			{
+				"styled-jsx": {
+					"plugins": ["@styled-jsx/plugin-sass"]
+				}
+			}
+		]
+	],
+	"ignore": ["node_modules"]
+}
