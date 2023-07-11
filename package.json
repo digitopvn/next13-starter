@@ -1,6 +1,6 @@
 {
 	"name": "diginext13",
-	"version": "3.9.0",
+	"version": "3.9.1",
 	"scripts": {
 		"dev": "npm run clean && concurrently \"npm run set-permission\" \"nodemon\" \"npm run node-server-dev\"",
 		"node-server-dev": "node server.dev",
