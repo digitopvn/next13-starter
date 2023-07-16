@@ -13,7 +13,7 @@ const login: FC<LoginProps> = () => {
 		<MasterPageAuth
 			isPrivate={false}
 			meta={{
-				pageName: "Đăng nhập",
+				title: "Đăng nhập",
 				description: "diginext13",
 			}}
 		>

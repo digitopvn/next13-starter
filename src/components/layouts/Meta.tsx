@@ -5,7 +5,7 @@ import { NextSeo } from "next-seo";
 import { AppConfig } from "@/modules/config/AppConfig";
 
 type IMetaProps = {
-	pageName?: string | null | undefined;
+	title?: string | null | undefined;
 	description?: string;
 	canonical?: string;
 	image?: string;
@@ -13,8 +13,8 @@ type IMetaProps = {
 
 const Meta = (props: IMetaProps) => {
 	const router = useRouter();
-	const title = `${AppConfig.meta?.title}${props.hasOwnProperty("pageName") ? `${props.pageName ? ` | ${props.pageName}` : ``}` : " | Trang chủ"}`;
-	const description = `${props.description || AppConfig.meta.description}`;
+	const title = `${AppConfig.title}${props.hasOwnProperty("title") ? `${props.title ? ` | ${props.title}` : ``}` : " | Trang chủ"}`;
+	const description = `${props.description || AppConfig.description}`;
 	const image = `${props.image || `${router.basePath}/share.webp`}`;
 
 	return (

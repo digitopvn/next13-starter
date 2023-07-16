@@ -13,12 +13,12 @@ const ProvidersAuth = dynamic(() => import("@/components/context/compose/Provide
 
 type IMainProps = {
 	isPrivate?: boolean;
-	meta?: { pageName?: string; description?: string };
+	meta?: { title?: string; description?: string };
 	children?: ReactNode;
 };
 
 const MasterPageAuth = (props: IMainProps) => {
-	const pageName = props.meta?.pageName || "";
+	const title = props.meta?.title || "";
 
 	const router = useRouter();
 
@@ -26,7 +26,7 @@ const MasterPageAuth = (props: IMainProps) => {
 		(async () => {
 			const gaPage = (await import("@/plugins/tracking")).gaPage;
 			if (gaIds?.length) {
-				gaPage(router.asPath, pageName);
+				gaPage(router.asPath, title);
 			}
 		})();
 
@@ -35,7 +35,7 @@ const MasterPageAuth = (props: IMainProps) => {
 
 	return (
 		<>
-			<Meta pageName={pageName} description={props.meta?.description} />
+			<Meta title={title} description={props.meta?.description} />
 
 			<GlobalStyle />
 

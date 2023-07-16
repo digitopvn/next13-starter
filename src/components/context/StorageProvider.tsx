@@ -10,32 +10,12 @@ interface IContext {
 
 	isLoading: boolean;
 	setIsLoading: (props: any) => void;
-
-	isShowUpdate: boolean;
-	setIsShowUpdate: (props: any) => void;
-
-	isShowLogin: boolean;
-	setIsShowLogin: (props: any) => void;
-
-	isShowImages: boolean;
-	setIsShowImages: (props: any) => void;
-
-	srcImages: string;
-	setSrcImages: (props: any) => void;
 }
 
 export const StorageContext = createContext<IContext | null>(null);
 
 const StorageProvider = (props: any) => {
 	//
-
-	const [isShowUpdate, setIsShowUpdate] = useState(false);
-
-	const [isShowImages, setIsShowImages] = useState(false);
-
-	const [srcImages, setSrcImages] = useState("");
-
-	const [isShowLogin, setIsShowLogin] = useState(false);
 
 	const [token, setToken] = useState();
 	const [user, setUser] = useState<IUser | null>({
@@ -53,14 +33,6 @@ const StorageProvider = (props: any) => {
 				setUser,
 				isLoading,
 				setIsLoading,
-				isShowUpdate,
-				setIsShowUpdate,
-				isShowLogin,
-				setIsShowLogin,
-				isShowImages,
-				setIsShowImages,
-				srcImages,
-				setSrcImages,
 			}}
 			{...props}
 		></StorageContext.Provider>

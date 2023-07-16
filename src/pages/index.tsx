@@ -13,7 +13,7 @@ const Index = () => {
 			<MasterPageAuth
 				isPrivate={false}
 				meta={{
-					pageName: "Trang Chủ",
+					title: "Trang Chủ",
 				}}
 			>
 				<UIHome />

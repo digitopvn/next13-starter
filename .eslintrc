@@ -59,6 +59,7 @@
 				"tailwindcss/no-custom-classname": "off",
 				"tailwindcss/migration-from-tailwind-2": "off",
 				"@typescript-eslint/naming-convention": "off",
+				"@typescript-eslint/no-throw-literal": "off",
 				"unused-imports/no-unused-vars": "off"
 			}
 		},
