@@ -7,13 +7,13 @@ const GlobalStyle = dynamic(() => import("@/styles/GlobalStyle"), { ssr: false }
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 
 type IMainProps = {
-	meta?: { pageName?: string; description?: string };
+	meta?: { title?: string; description?: string };
 	children?: ReactNode;
 };
 
 const MasterPage = (props: IMainProps) => (
 	<>
-		<Meta pageName={props.meta?.pageName} description={props.meta?.description} />
+		<Meta title={props.meta?.title} description={props.meta?.description} />
 
 		<GlobalStyle />
 

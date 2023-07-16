@@ -20,7 +20,7 @@ const Index = () => {
 
 			<MasterPageAuth
 				meta={{
-					pageName: "Trang Chủ",
+					title: "Trang Chủ",
 					description: "diginext13",
 				}}
 			>

@@ -4,11 +4,9 @@ export const AppConfig = {
 	environment: process.env.NEXT_PUBLIC_ENV || "development",
 	site_name: "Top Group",
 	locale: "vi",
-	meta: {
-		title: "Digitop",
-		description: "Starter",
-		type: "article",
-	},
+
+	title: "Digitop",
+	description: "Starter",
 
 	getBaseUrl: (url = "") => {
 		return process.env.NEXT_PUBLIC_BASE_URL ? `${process.env.NEXT_PUBLIC_BASE_URL}${url}` : url;

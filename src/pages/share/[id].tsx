@@ -27,7 +27,7 @@ const sharePage = (props: any) => {
 				}
 			`}</style>
 
-			<Meta image={props?.image} pageName={null}></Meta>
+			<Meta image={props?.image} title={null}></Meta>
 		</>
 	);
 };
