@@ -1,6 +1,8 @@
+import trimNull from "diginext-utils/dist/string/trimNull";
+
 const stringToArray = (str: string | undefined): Array<string> => {
 	if (!str) return [];
-	return `${str}`.split(",");
+	return `${trimNull(str).replace(/ /g, "")}`.split(",");
 };
 
 export const gaIds = stringToArray(process.env.NEXT_PUBLIC_GA) ?? [];
