@@ -21,9 +21,11 @@ class MyDocument extends Document {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            ${gaIds.map((id: string) => {
-				return `gtag('config', '${id}');\n`;
-			})}
+            ${gaIds
+				.map((id: string) => {
+					return `gtag('config', '${id}');`;
+				})
+				.join("\n")}
           `,
 								}}
 							/>
@@ -70,9 +72,11 @@ class MyDocument extends Document {
                             t.src=v;s=b.getElementsByTagName(e)[0];
                             s.parentNode.insertBefore(t,s)}(window, document,'script',
                             'https://connect.facebook.net/en_US/fbevents.js');
-                            ${fbPixelIds.map((id: string) => {
-								return `fbq('init', '${id}');\n`;
-							})}
+                            ${fbPixelIds
+								.map((id: string) => {
+									return `fbq('init', '${id}');`;
+								})
+								.join("\n")}
                             fbq('track', 'PageView');
           `,
 								}}
