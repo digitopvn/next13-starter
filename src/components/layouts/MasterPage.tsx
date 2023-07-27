@@ -1,26 +1,47 @@
 import dynamic from "next/dynamic";
-import type { ReactNode } from "react";
+import { useRouter } from "next/router";
+import { type ReactNode, useEffect } from "react";
 
 import { Meta } from "@/components/layouts/Meta";
 
 const GlobalStyle = dynamic(() => import("@/styles/GlobalStyle"), { ssr: false });
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 
-type IMainProps = {
+interface IMainProps {
 	meta?: { title?: string; description?: string };
 	children?: ReactNode;
+}
+
+const MasterPage = (props: IMainProps) => {
+	const router = useRouter();
+	const title = props.meta?.title || "";
+
+	useEffect(() => {
+		(async () => {
+			const gaPage = (await import("@/plugins/tracking")).gaPage;
+			const gaIds = (await import("@/plugins/tracking")).gaIds;
+			try {
+				if (gaIds?.length) {
+					gaPage(router.asPath, title);
+				}
+			} catch (error) {
+				console.error(`metname error`, error);
+			}
+		})();
+		return () => {};
+	}, []);
+
+	return (
+		<>
+			<Meta title={title} description={props.meta?.description} />
+
+			<GlobalStyle />
+
+			<Providers {...props}>
+				<main className="content">{props.children}</main>
+			</Providers>
+		</>
+	);
 };
-
-const MasterPage = (props: IMainProps) => (
-	<>
-		<Meta title={props.meta?.title} description={props.meta?.description} />
-
-		<GlobalStyle />
-
-		<Providers {...props}>
-			<main className="content">{props.children}</main>
-		</Providers>
-	</>
-);
 
 export default MasterPage;
