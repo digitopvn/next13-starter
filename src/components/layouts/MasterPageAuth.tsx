@@ -5,17 +5,16 @@ import type { ReactNode } from "react";
 import { useEffect } from "react";
 
 import { Meta } from "@/components/layouts/Meta";
-import { gaIds } from "@/plugins/tracking";
 
 const GlobalStyle = dynamic(() => import("@/styles/GlobalStyle"), { ssr: false });
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 const ProvidersAuth = dynamic(() => import("@/components/context/compose/ProvidersAuth"), { ssr: false });
 
-type IMainProps = {
+interface IMainProps {
 	isPrivate?: boolean;
 	meta?: { title?: string; description?: string };
 	children?: ReactNode;
-};
+}
 
 const MasterPageAuth = (props: IMainProps) => {
 	const title = props.meta?.title || "";
@@ -25,11 +24,15 @@ const MasterPageAuth = (props: IMainProps) => {
 	useEffect(() => {
 		(async () => {
 			const gaPage = (await import("@/plugins/tracking")).gaPage;
-			if (gaIds?.length) {
-				gaPage(router.asPath, title);
+			const gaIds = (await import("@/plugins/tracking")).gaIds;
+			try {
+				if (gaIds?.length) {
+					gaPage(router.asPath, title);
+				}
+			} catch (error) {
+				console.error(`metname error`, error);
 			}
 		})();
-
 		return () => {};
 	}, []);
 
