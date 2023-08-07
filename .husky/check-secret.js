@@ -82,6 +82,10 @@ const checkPrivateKey = async (params) => {
 
 	if (result.status) {
 	} else {
-		throw new Error(`FOUND PRIVATE KEY OR SECRET IN ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT!\n\n${JSON.stringify(result)}\n\n`);
+		throw new Error(
+			`FOUND PRIVATE KEY OR SECRET IN ENV, PLEASE IGNORE THEM BEFORE PUSH TO GIT!\n\n${JSON.stringify(
+				result
+			)}\n\n`
+		);
 	}
 })();
