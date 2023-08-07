@@ -15,7 +15,7 @@
 				"semi": true,
 				"singleQuote": false,
 				"endOfLine": "lf",
-				"printWidth": 150
+				"printWidth": 120
 			}
 		],
 		"no-param-reassign": 0
@@ -25,7 +25,12 @@
 		{
 			"files": ["**/*.ts", "**/*.tsx"],
 			"plugins": ["@typescript-eslint", "unused-imports", "tailwindcss", "simple-import-sort"],
-			"extends": ["plugin:tailwindcss/recommended", "airbnb-typescript", "next/core-web-vitals", "plugin:prettier/recommended"],
+			"extends": [
+				"plugin:tailwindcss/recommended",
+				"airbnb-typescript",
+				"next/core-web-vitals",
+				"plugin:prettier/recommended"
+			],
 			"parserOptions": {
 				"project": "./tsconfig.json"
 			},
