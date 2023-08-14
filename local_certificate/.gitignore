@@ -1,2 +1,2 @@
-localhost.crt
-localhost.key
+*.crt
+*.key
