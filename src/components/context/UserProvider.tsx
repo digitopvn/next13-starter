@@ -1,7 +1,7 @@
 import { isNull, toArray } from "diginext-utils/dist/object";
 import Timer from "diginext-utils/dist/Timer";
 import { isEmpty } from "lodash";
-import { useRouter } from "next/router";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { SignInOptions } from "next-auth/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -34,8 +34,11 @@ interface Props {
 
 const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 	const router = useRouter();
-	const { query } = router;
-	const { urlCallback } = query;
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+
+	// const { query } = router;
+	// const { urlCallback } = query;
 
 	const { user, setUser, token, setToken } = useStorage();
 
@@ -85,6 +88,22 @@ const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 		return false;
 	};
 
+	const handleQuery = () => {
+		const current = new URLSearchParams(Array.from(searchParams.entries())); // -> has to use this form
+
+		if (current.has("urlCallback")) {
+			current.delete("urlCallback");
+		}
+		// current.delete(""});
+
+		// cast to string
+		const search = current.toString();
+		// or const query = `${'?'.repeat(search.length && 1)}${search}`;
+		// const query = search ? `?${search}` : "";
+
+		return `${search}`;
+	};
+
 	const onChangeSession = async () => {
 		console.log("session :>> ", session);
 		if (status === "loading") return false; // skip loading
@@ -125,7 +144,7 @@ const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 			// if (checkTokenExpired(token)) return;
 		}
 
-		if (isEmpty(user) || router?.isReady) {
+		if (isEmpty(user)) {
 			// handle login
 
 			// handle profile
@@ -136,18 +155,9 @@ const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 				return false;
 			}
 
+			//TODO
 			// handle next route
-			if (urlCallback) {
-				delete query.urlCallback;
-				router.push(
-					{
-						pathname: decodeURIComponent(urlCallback as string),
-						query: { ...query },
-					},
-					undefined,
-					{ shallow: true }
-				);
-			}
+			// router.push(`${urlCallback}${handleQuery()}`);
 
 			// handle show children
 			setIsShowChildren(!isPrivate || (isPrivate && userApi && tokenFromSession.id));
@@ -200,7 +210,7 @@ const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 			onChangeSession();
 		})();
 		return () => {};
-	}, [status, JSON.stringify(session), router?.isReady]);
+	}, [status, JSON.stringify(session)]);
 
 	return (
 		<UserContext.Provider

@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ interface IMainProps {
 const MasterPageAuth = (props: IMainProps) => {
 	const title = props.meta?.title || "";
 
-	const router = useRouter();
+	const pathname = usePathname();
 
 	useEffect(() => {
 		(async () => {
@@ -27,7 +27,7 @@ const MasterPageAuth = (props: IMainProps) => {
 			const gaIds = (await import("@/plugins/tracking")).gaIds;
 			try {
 				if (gaIds?.length) {
-					gaPage(router.asPath, title);
+					gaPage(pathname, title);
 				}
 			} catch (error) {
 				console.error(`metname error`, error);

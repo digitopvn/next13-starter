@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import type { FC } from "react";
 import React from "react";
@@ -13,15 +13,15 @@ const UILogin: FC<UILoginProps> = () => {
 	const { user } = useStorage();
 
 	const { onSigninFacebook } = useUser();
-	const router = useRouter();
+	const pathname = usePathname();
 
 	const onLoginGoogle = () => {
-		signIn("google", { callbackUrl: AppConfig.getBaseUrl(router.asPath) });
+		signIn("google", { callbackUrl: AppConfig.getBaseUrl(pathname) });
 	};
 
 	const onLoginFacebook = async () => {
 		// signIn("login-fb");
-		const res = await onSigninFacebook({ callbackUrl: AppConfig.getBaseUrl(router.asPath) });
+		const res = await onSigninFacebook({ callbackUrl: AppConfig.getBaseUrl(pathname) });
 
 		console.log("res :>> ", res);
 	};

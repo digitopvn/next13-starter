@@ -1,12 +1,12 @@
 import { QRCode } from "antd";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { AppConfig } from "@/modules/config/AppConfig";
 import asset from "@/plugins/asset";
 
 const QrUrl = () => {
-	const router = useRouter();
+	const pathname = usePathname();
 
 	const [url, setUrl] = useState("");
 
@@ -21,7 +21,7 @@ const QrUrl = () => {
 						//
 						value={url || "-"}
 						size={400}
-						bgColor={"#ffffff"}
+						color={"#ffffff"}
 						icon={asset("/assets/images/logo-icon.svg")}
 						iconSize={80}
 					/>
@@ -34,7 +34,7 @@ const QrUrl = () => {
 
 	useEffect(() => {
 		(async () => {
-			const __url = AppConfig.getBaseUrl(router.asPath);
+			const __url = AppConfig.getBaseUrl(pathname);
 
 			setUrl(__url);
 		})();

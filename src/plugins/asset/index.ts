@@ -3,7 +3,8 @@ import { toBool } from "diginext-utils/dist/object";
 import { AppConfig, IsLocal } from "@/modules/config/AppConfig";
 
 const asset = (src: string, isEnabledCDN?: boolean) => {
-	isEnabledCDN = typeof isEnabledCDN !== "undefined" ? isEnabledCDN : toBool(process.env.NEXT_PUBLIC_USE_CDN || "") || false;
+	isEnabledCDN =
+		typeof isEnabledCDN !== "undefined" ? isEnabledCDN : toBool(process.env.NEXT_PUBLIC_USE_CDN || "") || false;
 	const isEnableBasePath = toBool(process.env.NEXT_PUBLIC_BASE_PATH || "") || false;
 
 	if (isEnabledCDN) {

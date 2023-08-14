@@ -51,6 +51,7 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/public ./public
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/node_modules ./node_modules
 # COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next-i18next.config.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.env .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/server.js .
 
 EXPOSE 3000 80
 

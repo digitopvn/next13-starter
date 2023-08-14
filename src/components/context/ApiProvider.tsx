@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-param-reassign */
 import { toArray, toBool, toInt } from "diginext-utils/dist/object";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { createContext, useContext } from "react";
 
 import { useStorage } from "@/components/context/StorageProvider";

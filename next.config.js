@@ -19,6 +19,9 @@ const nextConfig = {
 	eslint: {
 		dirs: ["*"],
 	},
+	serverRuntimeConfig: {
+		version,
+	},
 	publicRuntimeConfig: {
 		version,
 	},

@@ -35,11 +35,11 @@ const options = useHTTPS
 			 * bash local_certificate/cer.sh
 			 * Read more: local_certificate/readme.md
 			 */
-			// key: fs.readFileSync("local_certificate/sap-canvas-maker.zii.vn.key"),
-			// cert: fs.readFileSync("local_certificate/sap-canvas-maker.zii.vn.crt"),
+			key: fs.readFileSync("local_certificate/sap-canvas-maker.zii.vn.key"),
+			cert: fs.readFileSync("local_certificate/sap-canvas-maker.zii.vn.crt"),
 
-			key: fs.readFileSync("local_certificate/localhost.key"),
-			cert: fs.readFileSync("local_certificate/localhost.crt"),
+			// key: fs.readFileSync("local_certificate/localhost.key"),
+			// cert: fs.readFileSync("local_certificate/localhost.crt"),
 	  }
 	: {};
 

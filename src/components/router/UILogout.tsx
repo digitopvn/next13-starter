@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import type { FC } from "react";
 import { useEffect } from "react";
 import React from "react";

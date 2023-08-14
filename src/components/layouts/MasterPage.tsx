@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect } from "react";
 
 import { Meta } from "@/components/layouts/Meta";
@@ -13,8 +13,9 @@ interface IMainProps {
 }
 
 const MasterPage = (props: IMainProps) => {
-	const router = useRouter();
 	const title = props.meta?.title || "";
+
+	const pathname = usePathname();
 
 	useEffect(() => {
 		(async () => {
@@ -22,7 +23,7 @@ const MasterPage = (props: IMainProps) => {
 			const gaIds = (await import("@/plugins/tracking")).gaIds;
 			try {
 				if (gaIds?.length) {
-					gaPage(router.asPath, title);
+					gaPage(pathname, title);
 				}
 			} catch (error) {
 				console.error(`metname error`, error);
