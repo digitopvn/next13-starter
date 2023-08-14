@@ -21,7 +21,7 @@ const QrUrl = () => {
 						//
 						value={url || "-"}
 						size={400}
-						bgColor={"#ffffff"}
+						color={"#ffffff"}
 						icon={asset("/assets/images/logo-icon.svg")}
 						iconSize={80}
 					/>

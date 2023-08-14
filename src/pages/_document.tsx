@@ -12,7 +12,11 @@ class MyDocument extends Document {
 					{/* // gtag */}
 					{gaIds?.length ? (
 						<>
-							<script defer id="googletagmanager" src={`https://www.googletagmanager.com/gtag/js?id=${gaIds[0]}`} />
+							<script
+								defer
+								id="googletagmanager"
+								src={`https://www.googletagmanager.com/gtag/js?id=${gaIds[0]}`}
+							/>
 							<script
 								id="gtag-init"
 								defer
