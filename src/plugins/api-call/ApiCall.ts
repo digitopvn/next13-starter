@@ -38,7 +38,10 @@ const ApiCall = async ({
 	let api;
 	const axiosOption = {
 		timeout: 1000 * 30, // Wait for 30 seconds
-		url: url || `${process.env.NEXT_PUBLIC_API_BASE_PATH}${path}` || `${process.env.NEXT_PUBLIC_BASE_URL}${baseUrlPath}`,
+		url:
+			url ||
+			`${process.env.NEXT_PUBLIC_API_BASE_URL}${path}` ||
+			`${process.env.NEXT_PUBLIC_BASE_URL}${baseUrlPath}`,
 		method,
 		headers: { ...headers },
 		params: { ...params },
