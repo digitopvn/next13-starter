@@ -9,7 +9,7 @@ const asset = (src: string, isEnabledCDN?: boolean) => {
 
 	if (isEnabledCDN) {
 		src = src.replace(`${AppConfig.getBasePath("/public")}`, "");
-		return `${process.env.NEXT_PUBLIC_CDN_BASE_PATH}/public${process.env.NEXT_PUBLIC_VERSION_CDN}${src}`;
+		return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/public${process.env.NEXT_PUBLIC_VERSION_CDN}${src}`;
 	}
 	if (isEnableBasePath) {
 		src = src.replace(`/${AppConfig.getBasePath()}`, "");
