@@ -13,9 +13,10 @@ WORKDIR /usr/src
 
 COPY ./package.json ./package.json
 
-RUN npm i pnpm -g
+# RUN npm i pnpm -g
+# RUN pnpm i diginext-utils
 
-RUN pnpm i diginext-utils
+RUN yarn add diginext-utils
 
 # apps
 COPY . .
@@ -57,6 +58,7 @@ COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/node_modules ./node_modul
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.env .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/server.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/package.json .
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next-sitemap.config.js .
 
 EXPOSE 3000 80
 
