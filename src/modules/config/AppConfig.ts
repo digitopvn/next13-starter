@@ -17,7 +17,9 @@ export const AppConfig = {
 	},
 
 	getCDNPath: (url = "") => {
-		return process.env.NEXT_PUBLIC_CDN_ROOT ? `${process.env.NEXT_PUBLIC_CDN_ROOT}${process.env.NEXT_PUBLIC_VERSION_CDN}${url}` : url;
+		return process.env.NEXT_PUBLIC_CDN_ROOT
+			? `${process.env.NEXT_PUBLIC_CDN_ROOT}${process.env.NEXT_PUBLIC_VERSION_CDN}${url}`
+			: url;
 	},
 };
 

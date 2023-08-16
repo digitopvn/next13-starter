@@ -13,7 +13,9 @@ export interface IMetaProps {
 
 const Meta = (props: IMetaProps) => {
 	const router = useRouter();
-	const title = `${AppConfig.title}${props.hasOwnProperty("title") ? `${props.title ? ` | ${props.title}` : ``}` : " | Trang chủ"}`;
+	const title = `${AppConfig.title}${
+		props.hasOwnProperty("title") ? `${props.title ? ` | ${props.title}` : ``}` : " | Trang chủ"
+	}`;
 	const description = `${props.description || AppConfig.description}`;
 	const image = `${props.image || `${router.basePath}/share.webp`}`;
 
@@ -32,7 +34,9 @@ const Meta = (props: IMetaProps) => {
 				<meta property="og:image:width" content="1200" />
 				<meta property="og:image:height" content="630" />
 
-				{process.env.NEXT_PUBLIC_FB_APP_ID && <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FB_APP_ID} />}
+				{process.env.NEXT_PUBLIC_FB_APP_ID && (
+					<meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FB_APP_ID} />
+				)}
 
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -42,11 +46,29 @@ const Meta = (props: IMetaProps) => {
 
 				<link rel="shortcut icon" href={`${router.basePath}/favicon.ico`} />
 
-				<link rel="shortcut apple-touch-icon" sizes="180x180" href={`${router.basePath}/apple-touch-icon.png`} />
-				<link rel="shortcut icon" type="image/webp" sizes="32x32" href={`${router.basePath}/favicon-32x32.webp`} />
-				<link rel="shortcut icon" type="image/webp" sizes="16x16" href={`${router.basePath}/favicon-16x16.webp`} />
+				<link
+					rel="shortcut apple-touch-icon"
+					sizes="180x180"
+					href={`${router.basePath}/apple-touch-icon.png`}
+				/>
+				<link
+					rel="shortcut icon"
+					type="image/webp"
+					sizes="32x32"
+					href={`${router.basePath}/favicon-32x32.webp`}
+				/>
+				<link
+					rel="shortcut icon"
+					type="image/webp"
+					sizes="16x16"
+					href={`${router.basePath}/favicon-16x16.webp`}
+				/>
 
-				<meta name="viewport" key="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+				<meta
+					name="viewport"
+					key="viewport"
+					content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+				/>
 			</Head>
 
 			<NextSeo

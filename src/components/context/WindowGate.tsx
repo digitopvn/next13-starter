@@ -65,11 +65,17 @@ const WindowGateProvider = ({ children, ...props }: any) => {
 							`}</style>
 
 							<div className="hol gateText">
-								<h2 className="text-3xl">Vui lòng truy cập trên thiết bị di động để có trải nghiệm tốt nhất.</h2>
+								<h2 className="text-3xl">
+									Vui lòng truy cập trên thiết bị di động để có trải nghiệm tốt nhất.
+								</h2>
 								<QrUrl />
 							</div>
 
-							<img className="non-drag fixed m-6 w-1/3 max-w-[150px]" src={asset("/images-webp/textures/game/logo.webp")} alt="" />
+							<img
+								className="non-drag fixed m-6 w-1/3 max-w-[150px]"
+								src={asset("/images-webp/textures/game/logo.webp")}
+								alt=""
+							/>
 						</div>
 					);
 				}
