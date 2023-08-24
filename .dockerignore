@@ -7,6 +7,5 @@ docker-compose.yml
 node_modules/
 optimizer/
 local_certificate/
-.env.local
 out/
 gcloud-service-account.json

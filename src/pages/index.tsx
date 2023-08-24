@@ -1,25 +1,21 @@
-// import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
+import MasterPage from "../components/layouts/MasterPage";
 
-import MasterPageAuth from "@/components/layouts/MasterPageAuth";
-
-const UIHome = dynamic(() => import("@/components/router/UIHome"), { ssr: false });
-
-const Index = () => {
-	// const router = useRouter();
-
+export default function Home() {
 	return (
 		<>
-			<MasterPageAuth
-				isPrivate={false}
-				meta={{
-					title: "Trang Chủ",
-				}}
-			>
-				<UIHome />
-			</MasterPageAuth>
+			<MasterPage>
+				{/*  */}
+				{/*  */}
+				{/*  */}
+			</MasterPage>
 		</>
 	);
-};
+}
 
-export default Index;
+// export const getServerSideProps = async () => {
+// 	const allUsers = await prisma.user.findMany();
+// 	// console.log(allUsers);
+// 	return {
+// 		props: {},
+// 	};
+// };

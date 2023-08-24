@@ -1,25 +1,22 @@
 import dynamic from "next/dynamic";
-import type { FC } from "react";
-import React from "react";
 
 import MasterPageAuth from "@/components/layouts/MasterPageAuth";
 
-const UILogin = dynamic(() => import("@/components/router/examples/UILogin"), { ssr: false });
-
-interface LoginProps {}
-// src/pages/examples/login
-const login: FC<LoginProps> = () => {
+const PageLogin = dynamic(() => import("@/components/router/examples/PageLogin"), { ssr: false });
+// /login
+const Login = (props: any) => {
 	return (
-		<MasterPageAuth
-			isPrivate={false}
-			meta={{
-				title: "Đăng nhập",
-				description: "diginext13",
-			}}
-		>
-			<UILogin />
-		</MasterPageAuth>
+		<>
+			<MasterPageAuth
+				meta={{
+					title: "Login",
+				}}
+				{...props}
+			>
+				<PageLogin {...props} />
+			</MasterPageAuth>
+		</>
 	);
 };
 
-export default login;
+export default Login;

@@ -1,206 +1,131 @@
-import { isNull, toArray } from "diginext-utils/dist/object";
+/* eslint-disable react-hooks/rules-of-hooks */
+import type { User } from "@prisma/client";
+import { toBool } from "diginext-utils/dist/object";
 import Timer from "diginext-utils/dist/Timer";
-import { isEmpty } from "lodash";
 import { useRouter } from "next/router";
-import type { SignInOptions } from "next-auth/react";
+import type { SignInOptions, SignInResponse } from "next-auth/react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 
 import { useStorage } from "@/components/context/StorageProvider";
+import PageLogin from "@/components/router/examples/PageLogin";
 import { AppConfig } from "@/modules/config/AppConfig";
-import ApiCall from "@/plugins/api-call/ApiCall";
-import { showNotifications } from "@/plugins/notifications";
+import { api } from "@/plugins/trpc/api";
 
-export interface IUser {
-	id?: string;
-	name?: string;
-	email?: string;
-	status?: "loading" | "login" | "not-login";
-}
 type UserContextType = {
+	getProfile: () => Promise<User | null>;
 	onSignOut: () => void;
-	getProfile: () => void;
-	onSignInById: (id: string, options?: SignInOptions) => void;
-	onSignInGoogle: () => void;
-	onSigninFacebook: (options?: SignInOptions) => void;
+	onSignInById: (id: string, options?: SignInOptions) => Promise<SignInResponse | undefined>;
+	onSignInGoogle: (options?: SignInOptions) => Promise<SignInResponse | undefined>;
+	onSignInFacebook: (options?: SignInOptions) => Promise<SignInResponse | undefined>;
+	onSignInDiscord: (options?: SignInOptions) => Promise<SignInResponse | undefined>;
+	onSignInGithub: (options?: SignInOptions) => Promise<SignInResponse | undefined>;
 };
 
 export const UserContext = React.createContext<UserContextType | null>(null);
 
-interface Props {
+export interface IUserProvider {
 	isPrivate?: boolean;
 	children?: React.ReactNode;
 }
 
-const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
+const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }) => {
 	const router = useRouter();
 	const { query } = router;
 	const { urlCallback } = query;
 
-	const { user, setUser, token, setToken } = useStorage();
+	const { user, setUser, token, setToken, setIsLoading } = useStorage();
 
 	const { data: session, status } = useSession();
 
-	const [isShowChildren, setIsShowChildren] = useState(!isPrivate || (isPrivate && user?.name && token));
+	const {
+		data: profile,
+		isLoading: isQueryLoading,
+		isError,
+		error,
+		refetch,
+	} = api.user.getProfile.useQuery(
+		undefined, // no input
+		{ enabled: session?.user !== undefined }
+	);
+
+	const [isShowChildren, setIsShowChildren] = useState(
+		toBool(!isPrivate || toBool(isPrivate && status == "authenticated"))
+	);
+	useEffect(() => {
+		setIsShowChildren(toBool(!isPrivate || toBool(isPrivate && status == "authenticated")));
+	}, [isPrivate, status]);
 
 	const onSignOut = async () => {
 		console.log("onSignOut");
 		setToken(null);
-		setUser({
-			status: "not-login",
-		});
+		setUser(undefined);
 
 		await signOut({ redirect: false });
+
+		setIsLoading(true);
+		let i = 0;
+		while (i < 10) {
+			await Timer.wait(100);
+			await signOut({ redirect: false });
+			i++;
+		}
+		setIsLoading(false);
 	};
 
 	const onSignInById = async (id: string, options?: SignInOptions) => {
-		//
-		await signIn(id, {
-			callbackUrl: AppConfig.getBaseUrl(),
+		return signIn(id, {
+			redirect: false,
+			callbackUrl: AppConfig.getBaseUrl(router.asPath),
 			...options,
 		});
 	};
-
-	const onSigninFacebook = async (options?: SignInOptions) => {
-		await onSignInById("login-fb", options);
+	const onSignInFacebook = async (options?: SignInOptions) => {
+		return onSignInById("facebook", options);
 	};
-
-	const onSignInGoogle = (options?: SignInOptions) => {
-		onSignInById("google", options);
+	const onSignInGoogle = async (options?: SignInOptions) => {
+		return onSignInById("google", options);
+	};
+	const onSignInDiscord = async (options?: SignInOptions) => {
+		return onSignInById("discord", options);
+	};
+	const onSignInGithub = async (options?: SignInOptions) => {
+		return onSignInById("github", options);
 	};
 
 	const getProfile = async () => {
-		const res = await ApiCall({
-			path: "/api/v1/auth/customers/profiles",
-			token: (session as any).token.id,
-		});
-
-		console.log("getProfile res :>> ", res);
-
-		if (res.status) {
-			setUser({ ...user, ...res.data, status: "login" });
+		//
+		const res = await refetch();
+		if (res.isSuccess) {
 			return res.data;
 		}
-		onSignOut();
-		return false;
+
+		return null;
 	};
 
-	const onChangeSession = async () => {
-		console.log("session :>> ", session);
-		if (status === "loading") return false; // skip loading
-
-		if (status === "unauthenticated") {
-			// not login
-			onSignOut();
-			if (isPrivate) {
-				router.push("/");
-			}
-			return false;
+	useEffect(() => {
+		if (status == "loading" || (isQueryLoading && status == "authenticated")) {
+			setIsLoading(true);
 		}
-		const { token: tokenFromSession } = session as any;
-
-		// if ((session as any)?.needRefresh) {
-		// 	// token expired
-
-		// 	// onRefreshToken({
-		// 	//     token: token?.id,
-		// 	//     refreshToken: token?.refreshToken,
-		// 	// });
-		// 	return false;
-		// }
-
-		if ((session as any)?.error) {
-			// handle error
-
-			const msgs = toArray((session as any)?.response?.message) as Array<string>;
-			if (msgs) showNotifications(msgs, true);
-
-			onSignOut();
-			return false;
-		}
-
-		if (tokenFromSession) {
-			// handle token
-			setToken(tokenFromSession.id);
-			// if (checkTokenExpired(token)) return;
-		}
-
-		if (isEmpty(user) || router?.isReady) {
-			// handle login
-
-			// handle profile
-			const userApi = await getProfile();
-			if (!userApi) {
-				console.log("userApi", userApi);
-				console.log("PLEASE CONFIG API GET PROFILE!");
-				return false;
-			}
-
-			// handle next route
-			if (urlCallback) {
-				delete query.urlCallback;
-				router.push(
-					{
-						pathname: decodeURIComponent(urlCallback as string),
-						query: { ...query },
-					},
-					undefined,
-					{ shallow: true }
-				);
-			}
-
-			// handle show children
-			setIsShowChildren(!isPrivate || (isPrivate && userApi && tokenFromSession.id));
-			return true;
-		}
-
-		onSignOut();
-
-		if (isPrivate) {
-			router.push("/");
-		}
-
-		return false;
-	};
-
-	const checkUser = async () => {
+		if (status == "unauthenticated") setIsLoading(false);
 		//
+	}, [status, isQueryLoading]);
 
-		if (!user) return;
-
-		switch (user?.status) {
-			case "loading":
-				{
-				}
-				break;
-
-			case "not-login":
-				{
-				}
-				break;
-
-			case "login":
-				{
-				}
-				break;
-
-			default:
-				break;
+	useEffect(() => {
+		if (profile) {
+			setUser(profile as User);
+			setIsLoading(false);
 		}
-	};
 
-	useEffect(() => {
-		checkUser();
 		return () => {};
-	}, [user?.status]);
+	}, [JSON.stringify(profile)]);
 
-	useEffect(() => {
-		(async () => {
-			await Timer.wait(100);
-			onChangeSession();
-		})();
-		return () => {};
-	}, [status, JSON.stringify(session), router?.isReady]);
+	if (status == "loading") return <></>;
+
+	// Error state
+	if (isError) {
+		return <div>An error occurred: {error.message}</div>;
+	}
 
 	return (
 		<UserContext.Provider
@@ -209,11 +134,13 @@ const UserProvider: React.FC<Props> = ({ children, isPrivate }) => {
 				getProfile,
 				onSignOut,
 				onSignInById,
-				onSigninFacebook,
+				onSignInFacebook,
 				onSignInGoogle,
+				onSignInDiscord,
+				onSignInGithub,
 			}}
 		>
-			{isShowChildren ? <>{children}</> : <></>}
+			{isShowChildren ? <>{children}</> : <PageLogin />}
 		</UserContext.Provider>
 	);
 };

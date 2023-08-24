@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 
@@ -70,6 +71,8 @@ const Meta = (props: IMetaProps) => {
 					content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 				/>
 			</Head>
+
+			<Link href="http://wearetopgroup.com/"></Link>
 
 			<NextSeo
 				title={title}

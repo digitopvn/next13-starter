@@ -17,14 +17,14 @@
 		"noUnusedParameters": false,
 		"allowUnreachableCode": true,
 		"noFallthroughCasesInSwitch": true,
-		"target": "ES2015",
+		"target": "ES2017",
 		"outDir": "out",
 		"declaration": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"allowJs": false,
-		"checkJs": false,
+		"allowJs": true,
+		"checkJs": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 		"jsx": "preserve",
@@ -39,5 +39,5 @@
 		}
 	},
 	"exclude": ["./out/**/*", "./node_modules/**/*", "cypress/**/*.ts"],
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+	"include": [".eslintrc.cjs", "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }

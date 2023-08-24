@@ -20,10 +20,6 @@ RUN yarn add diginext-utils
 
 # apps
 COPY . .
-COPY ./.env.prod ./.env
-
-RUN rm -rf ./src/pages/examples
-RUN rm -rf ./src/pages/components
 
 # Start building
 RUN npm run build-all
@@ -48,13 +44,13 @@ USER nextjs
 WORKDIR /usr/app
 
 # Only copy build files & neccessary files to run:
+# COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next-i18next.config.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/node_modules ./node_modules
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next.config.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.next/standalone .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.next/static ./.next/static
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/public ./public
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/prisma ./prisma
-# COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/next-i18next.config.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/.env .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/server.js .
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /usr/src/package.json .
