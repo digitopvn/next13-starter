@@ -1,6 +1,6 @@
 {
 	"name": "diginext13",
-	"version": "3.12.2",
+	"version": "3.12.3",
 	"scripts": {
 		"dev": "npm run clean && npm run postinstall && concurrently \"npm run set-permission\" \"nodemon\" \"npm run node-server-dev\"",
 		"reset-db-local": "npx prisma db push --force-reset && npx prisma db push && npm run postinstall && npm run seed",
