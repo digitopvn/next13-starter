@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 
@@ -72,7 +72,7 @@ const Meta = (props: IMetaProps) => {
 				/>
 			</Head>
 
-			<Link href="http://wearetopgroup.com/"></Link>
+			{/* <Link href="https://www.wearetopgroup.com/"></Link> */}
 
 			<NextSeo
 				title={title}
