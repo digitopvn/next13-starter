@@ -75,7 +75,6 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 
 	const onSignInById = async (id: string, options?: SignInOptions) => {
 		return signIn(id, {
-			redirect: false,
 			callbackUrl: AppConfig.getBaseUrl(router.asPath),
 			...options,
 		});
