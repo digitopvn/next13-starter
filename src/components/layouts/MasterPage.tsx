@@ -4,7 +4,6 @@ import { type ReactNode, useEffect } from "react";
 
 import { Meta } from "@/components/layouts/Meta";
 
-const GlobalStyle = dynamic(() => import("@/styles/GlobalStyle"), { ssr: false });
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 
 interface IMainProps {
@@ -35,11 +34,7 @@ const MasterPage = (props: IMainProps) => {
 		<>
 			<Meta title={title} description={props.meta?.description} />
 
-			<GlobalStyle />
-
-			<Providers {...props}>
-				<main className="content">{props.children}</main>
-			</Providers>
+			<Providers {...props}>{props.children}</Providers>
 		</>
 	);
 };

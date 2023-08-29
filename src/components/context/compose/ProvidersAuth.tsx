@@ -2,6 +2,7 @@
 import React from "react";
 
 import Compose from "@/components/context/compose/Compose";
+import RoleProvider from "@/components/context/RoleProvider";
 import UserProvider from "@/components/context/UserProvider";
 
 const ProvidersAuth = (props: any) => {
@@ -10,6 +11,7 @@ const ProvidersAuth = (props: any) => {
 			components={[
 				//
 				UserProvider,
+				RoleProvider,
 			]}
 			basePath={`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth`}
 			clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}

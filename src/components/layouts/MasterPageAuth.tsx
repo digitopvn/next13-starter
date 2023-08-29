@@ -4,14 +4,14 @@ import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 
+import type { IRoleProvider } from "@/components/context/RoleProvider";
+import type { IUserProvider } from "@/components/context/UserProvider";
 import { Meta } from "@/components/layouts/Meta";
 
-const GlobalStyle = dynamic(() => import("@/styles/GlobalStyle"), { ssr: false });
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 const ProvidersAuth = dynamic(() => import("@/components/context/compose/ProvidersAuth"), { ssr: false });
 
-interface IMainProps {
-	isPrivate?: boolean;
+interface IMainProps extends IRoleProvider, IUserProvider {
 	meta?: { title?: string; description?: string };
 	children?: ReactNode;
 }
@@ -40,13 +40,9 @@ const MasterPageAuth = (props: IMainProps) => {
 		<>
 			<Meta title={title} description={props.meta?.description} />
 
-			<GlobalStyle />
-
 			<SessionProvider>
 				<Providers {...props}>
-					<ProvidersAuth {...props}>
-						<main className="content">{props.children}</main>
-					</ProvidersAuth>
+					<ProvidersAuth {...props}>{props.children}</ProvidersAuth>
 				</Providers>
 			</SessionProvider>
 		</>

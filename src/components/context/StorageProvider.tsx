@@ -1,12 +1,11 @@
+import type { User } from "@prisma/client";
 import { createContext, memo, useContext, useState } from "react";
-
-import type { IUser } from "@/components/context/UserProvider";
 
 interface IContext {
 	token: any;
 	setToken: (props: any) => void;
-	user: IUser | null;
-	setUser: (props: IUser | null) => void;
+	user: User | undefined;
+	setUser: (props: User | undefined) => void;
 
 	isLoading: boolean;
 	setIsLoading: (props: any) => void;
@@ -18,9 +17,7 @@ const StorageProvider = (props: any) => {
 	//
 
 	const [token, setToken] = useState();
-	const [user, setUser] = useState<IUser | null>({
-		status: "loading",
-	});
+	const [user, setUser] = useState<User | undefined>();
 
 	const [isLoading, setIsLoading] = useState(false);
 
