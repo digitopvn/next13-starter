@@ -2,18 +2,18 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { type ReactNode, useEffect } from "react";
 
+import type { IMetaProps } from "@/components/layouts/Meta";
 import { Meta } from "@/components/layouts/Meta";
 
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 
 interface IMainProps {
-	meta?: { title?: string; description?: string };
+	meta?: IMetaProps;
 	children?: ReactNode;
 }
 
 const MasterPage = (props: IMainProps) => {
 	const router = useRouter();
-	const title = props.meta?.title || "";
 
 	useEffect(() => {
 		(async () => {
@@ -21,7 +21,7 @@ const MasterPage = (props: IMainProps) => {
 			const gaIds = (await import("@/plugins/tracking")).gaIds;
 			try {
 				if (gaIds?.length) {
-					gaPage(router.asPath, title);
+					gaPage(router.asPath, props.meta?.title || "");
 				}
 			} catch (error) {
 				console.error(`metname error`, error);
@@ -32,7 +32,7 @@ const MasterPage = (props: IMainProps) => {
 
 	return (
 		<>
-			<Meta title={title} description={props.meta?.description} />
+			<Meta {...props?.meta} />
 
 			<Providers {...props}>{props.children}</Providers>
 		</>
