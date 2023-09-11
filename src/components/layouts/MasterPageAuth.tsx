@@ -6,19 +6,18 @@ import { useEffect } from "react";
 
 import type { IRoleProvider } from "@/components/context/RoleProvider";
 import type { IUserProvider } from "@/components/context/UserProvider";
+import type { IMetaProps } from "@/components/layouts/Meta";
 import { Meta } from "@/components/layouts/Meta";
 
 const Providers = dynamic(() => import("@/components/context/compose/Providers"), { ssr: false });
 const ProvidersAuth = dynamic(() => import("@/components/context/compose/ProvidersAuth"), { ssr: false });
 
 interface IMainProps extends IRoleProvider, IUserProvider {
-	meta?: { title?: string; description?: string };
+	meta?: IMetaProps;
 	children?: ReactNode;
 }
 
 const MasterPageAuth = (props: IMainProps) => {
-	const title = props.meta?.title || "";
-
 	const router = useRouter();
 
 	useEffect(() => {
@@ -27,7 +26,7 @@ const MasterPageAuth = (props: IMainProps) => {
 			const gaIds = (await import("@/plugins/tracking")).gaIds;
 			try {
 				if (gaIds?.length) {
-					gaPage(router.asPath, title);
+					gaPage(router.asPath, props.meta?.title || "");
 				}
 			} catch (error) {
 				console.error(`metname error`, error);
@@ -38,7 +37,7 @@ const MasterPageAuth = (props: IMainProps) => {
 
 	return (
 		<>
-			<Meta title={title} description={props.meta?.description} />
+			<Meta {...props?.meta} />
 
 			<SessionProvider>
 				<Providers {...props}>

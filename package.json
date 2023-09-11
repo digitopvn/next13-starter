@@ -1,13 +1,12 @@
 {
 	"name": "diginext13",
-	"version": "4.0.4",
+	"version": "4.0.6",
 	"scripts": {
 		"dev": "npm run clean && npm run postinstall && concurrently \"npm run set-permission\" \"nodemon\" \"npm run node-server-dev\"",
 		"reset-db-local": "npx prisma db push --force-reset && npm run postinstall && npm run seed",
 		"seed": "prisma db seed",
 		"node-server-dev": "node server.dev",
-		"build": "npm exec npm-run-all --sequential clean postinstall build-next",
-		"build-all": "npm exec npm-run-all --sequential clean postinstall img build-next",
+		"build": "npm exec npm-run-all --sequential clean postinstall img build-next",
 		"postinstall": "prisma generate",
 		"build-next": "next build",
 		"start": "node ./server.js",
