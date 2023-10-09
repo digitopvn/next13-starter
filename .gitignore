@@ -84,3 +84,6 @@ gcloud-service-account.json
 
 public/**/*-webp/
 public/**/*-thumb-webp/
+
+bun.lockb
+*.bun
