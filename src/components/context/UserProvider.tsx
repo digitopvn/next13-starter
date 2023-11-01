@@ -43,6 +43,7 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 		isLoading: isQueryLoading,
 		isError,
 		error,
+		isSuccess,
 		refetch,
 	} = api.user.getProfile.useQuery(
 		undefined, // no input
@@ -103,12 +104,20 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 	};
 
 	useEffect(() => {
-		if (status == "loading" || (isQueryLoading && status == "authenticated")) {
-			setIsLoading(true);
+		switch (true) {
+			case status == "loading":
+			case isQueryLoading:
+				setIsLoading(true);
+				break;
+
+			case isSuccess:
+			default:
+				setIsLoading(false);
+				break;
 		}
-		if (status == "unauthenticated") setIsLoading(false);
+
 		//
-	}, [status, isQueryLoading]);
+	}, [status, isQueryLoading, isSuccess]);
 
 	useEffect(() => {
 		if (profile) {
