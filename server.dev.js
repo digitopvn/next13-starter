@@ -79,17 +79,27 @@ async function openLocal() {
 
 	const urlHttp = `http://${ip}:${httpPort}/${basePath}`;
 
-	openWeb(urlHttp);
+	openWeb(`http://localhost:${httpPort}/${basePath}`);
 
 	const chalk = (await import("chalk")).default;
 	console.log(chalk.whiteBright("SERVER IS LISTEN ON:"));
 	console.group();
-	console.log(chalk.greenBright(urlHttp));
 
 	if (useHTTPS) {
 		const urlHttps = `https://${ip}:${httpsPort}/${basePath}`;
 		console.log(chalk.yellowBright(urlHttps));
 	}
+
+	try {
+		console.log("QR để mobile scan ra IP local nè !");
+
+		const qrcode = require("qrcode-terminal");
+		qrcode.generate(urlHttp, { small: true });
+	} catch (error) {
+		console.error(`qrcode-terminal error`, error);
+	}
+	console.log(chalk.greenBright(urlHttp));
+
 	console.groupEnd();
 }
 

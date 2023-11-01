@@ -40,7 +40,6 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 
 	const {
 		data: profile,
-		isLoading: isQueryLoading,
 		isError,
 		error,
 		isSuccess,
@@ -106,18 +105,16 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 	useEffect(() => {
 		switch (true) {
 			case status == "loading":
-			case isQueryLoading:
 				setIsLoading(true);
 				break;
 
+			case status == "unauthenticated":
 			case isSuccess:
 			default:
 				setIsLoading(false);
 				break;
 		}
-
-		//
-	}, [status, isQueryLoading, isSuccess]);
+	}, [status, isSuccess]);
 
 	useEffect(() => {
 		if (profile) {
