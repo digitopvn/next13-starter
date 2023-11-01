@@ -1,37 +1,23 @@
+import checkUserRoleByUserIdAsync from "@/server/api/routers/helpers/checkUserRoleByUserId";
 import { getServerAuthSession } from "@/server/auth";
 
 export default async function getServerRoleGate(ctx: any, roles: Array<string>) {
 	//
 
 	const session = await getServerAuthSession(ctx);
-	const id = session?.user.id;
+	const id = session?.user.id || "";
 
-	const PrismaClient = (await import("@prisma/client")).PrismaClient;
-	const prisma = new PrismaClient();
-
-	const userWithRoles = await prisma.user.findUnique({
-		where: {
-			id,
-		},
-		select: {
-			userRoles: {
-				include: {
-					role: {
-						select: {
-							name: true,
-						},
-					},
-				},
+	if (!id)
+		return {
+			redirect: {
+				destination: "/role",
+				permanent: false,
 			},
-		},
-	});
-	const userRoles = userWithRoles?.userRoles.map((ur) => ur.role.name) || [];
+		};
 
-	const allowRoles = new Set(["Admin", ...roles]);
+	const isAllow = await checkUserRoleByUserIdAsync(id, ["Admin", ...roles]);
 
-	const _list = userRoles.filter((item) => allowRoles.has(item));
-
-	if (_list.length > 0) {
+	if (isAllow) {
 		return {
 			props: { session },
 		};

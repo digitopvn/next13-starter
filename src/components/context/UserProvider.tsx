@@ -41,8 +41,8 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 	const {
 		data: profile,
 		isError,
-		isSuccess,
 		error,
+		isSuccess,
 		refetch,
 	} = api.user.getProfile.useQuery(
 		undefined, // no input

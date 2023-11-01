@@ -1,6 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { randomElement } from "diginext-utils/dist/array";
+import { randomStringAndNumberByLength } from "diginext-utils/dist/string/random";
 import { type GetServerSidePropsContext } from "next";
 import { type DefaultSession, getServerSession, type NextAuthOptions } from "next-auth";
+import type { Provider } from "next-auth/providers";
 import BattleNetProvider from "next-auth/providers/battlenet";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
@@ -10,6 +13,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "@/env.mjs";
 import { AppConfig } from "@/modules/config/AppConfig";
+import randomUrlImage from "@/plugins/utils/randomUrlImage";
 import { prisma } from "@/server/db";
 
 /**
@@ -33,7 +37,7 @@ declare module "next-auth" {
 	// }
 }
 
-const providers = [];
+const providers = [] as Provider[];
 if (env.NEXT_PUBLIC_DISCORD_CLIENT_ID) {
 	providers.push(
 		DiscordProvider({
@@ -52,11 +56,12 @@ if (env.NEXT_PUBLIC_DISCORD_CLIENT_ID) {
 		})
 	);
 }
-if (env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+
+if (env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
 	providers.push(
 		GoogleProvider({
-			clientId: env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
-			clientSecret: env.GOOGLE_CLIENT_SECRET as string,
+			clientId: env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+			clientSecret: env.GOOGLE_CLIENT_SECRET,
 			profile(profile) {
 				return {
 					providerAccountId: `GOOGLE-${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}-${profile.sub}`,
@@ -83,7 +88,7 @@ if (env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID) {
 					name: profile.name,
 					email: null,
 					emailOriginal: profile.email,
-					image: profile.picture.data.url,
+					image: profile?.picture?.data?.url,
 				};
 			},
 		})
@@ -139,19 +144,42 @@ providers.push(
 			//
 
 			throw new Error("Lỗi cmnr !");
-
-			//
-
-			/* add function to get user */
-
-			const user = {
-				id: "64e5b1acaf2d53812cb962fa", //FOR TEST ONLY
-			};
-			return user;
 		},
 		credentials: {
 			username: { label: "Username", type: "text ", placeholder: "jsmith" },
 			password: { label: "Password", type: "password" },
+		},
+	})
+);
+
+providers.push(
+	CredentialsProvider({
+		id: "guest-login",
+		name: "Guest Login",
+		async authorize(credentials, req) {
+			//
+			const codeName = randomElement(["Bí danh", "Giấu tên", "Ẩn mật", "Lẩn trốn", "Tàng hình", "Siêu nhân"]);
+			const id = randomStringAndNumberByLength(3);
+			const providerAccountId = randomStringAndNumberByLength(32);
+
+			const existingRole = await prisma.role.findFirst({ where: { name: "Viewer" } });
+			if (existingRole?.id) throw new Error("Not found role");
+
+			const user = await prisma.user.create({
+				data: {
+					name: `${codeName} ${id}`,
+					providerAccountId,
+					image: randomUrlImage(),
+				},
+			});
+
+			if (!user) throw new Error("Lỗi rồi má ơi");
+
+			return user;
+		},
+		credentials: {
+			// username: { label: "Username", type: "text ", placeholder: "jsmith" },
+			// password: { label: "Password", type: "password" },
 		},
 	})
 );
@@ -237,7 +265,7 @@ export const authOptions: NextAuthOptions = {
 		strategy: "jwt",
 	},
 	jwt: {
-		secret: process.env.JWT_SECRET as string,
+		secret: env.JWT_SECRET,
 		// The maximum age of the NextAuth.js issued JWT in seconds.
 		// Defaults to `session.maxAge`.
 		maxAge: 60 * 60 * 24 * 30,
