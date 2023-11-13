@@ -19,17 +19,23 @@ export const env = createEnv({
 			process.env.VERCEL ? z.string().min(1) : z.string().url().optional()
 		),
 		// Add `.min(1) on ID and SECRET if you want to make sure they're not empty
+		// @ts-ignore
 		NEXT_PUBLIC_DISCORD_CLIENT_ID: z.string().optional(),
 		DISCORD_CLIENT_SECRET: z.string().optional(),
+		// @ts-ignore
 		NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().optional(),
 		GOOGLE_CLIENT_SECRET: z.string().optional(),
+		// @ts-ignore
 		NEXT_PUBLIC_GITHUB_ID: z.string().optional(),
 		GITHUB_SECRET: z.string().optional(),
+		// @ts-ignore
 		NEXT_PUBLIC_BATTLENET_CLIENT_ID: z.string().optional(),
 		BATTLENET_CLIENT_SECRET: z.string().optional(),
 		BATTLENET_ISSUER: z.string().optional(),
+		// @ts-ignore
 		NEXT_PUBLIC_APPLE_ID: z.string().optional(),
 		APPLE_SECRET: z.string().optional(),
+		// @ts-ignore
 		NEXT_PUBLIC_FACEBOOK_CLIENT_ID: z.string().optional(),
 		FACEBOOK_CLIENT_SECRET: z.string().optional(),
 	},

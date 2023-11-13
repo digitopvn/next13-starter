@@ -1,12 +1,13 @@
 import Head from "next/head";
-// import Link from "next/link";
 import { useRouter } from "next/router";
+// import Link from "next/link";
 import { NextSeo } from "next-seo";
 
 import { AppConfig } from "@/modules/config/AppConfig";
 
 export interface IMetaProps {
-	title?: string | null | undefined;
+	fullTitle?: string;
+	title?: string;
 	description?: string;
 	canonical?: string;
 	image?: string;
@@ -14,9 +15,11 @@ export interface IMetaProps {
 
 const Meta = (props: IMetaProps) => {
 	const router = useRouter();
-	const title = `${AppConfig.title}${
-		props.hasOwnProperty("title") ? `${props.title ? ` | ${props.title}` : ``}` : " | Trang chủ"
-	}`;
+	const title = props.hasOwnProperty("fullTitle")
+		? props.fullTitle
+		: `${AppConfig.title}${
+				props.hasOwnProperty("title") ? `${props.title ? ` | ${props.title}` : ``}` : " | Trang chủ"
+		  }`;
 	const description = `${props.description || AppConfig.description}`;
 	const image = `${props.image || `${router.basePath}/share.webp`}`;
 
@@ -42,8 +45,8 @@ const Meta = (props: IMetaProps) => {
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-				<link rel="apple-touch-icon" href="/images-webp/ios-test.webp" />
-				<link rel="apple-touch-startup-image" href="/images-webp/ios-test.webp" />
+				<link rel="apple-touch-icon" href="/assets/images-webp/ios-test.webp" />
+				<link rel="apple-touch-startup-image" href="/assets/images-webp/ios-test.webp" />
 
 				<link rel="shortcut icon" href={`${router.basePath}/favicon.ico`} />
 
@@ -71,9 +74,7 @@ const Meta = (props: IMetaProps) => {
 					content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 				/>
 			</Head>
-
 			{/* <Link href="https://www.wearetopgroup.com/"></Link> */}
-
 			<NextSeo
 				title={title}
 				description={description}
