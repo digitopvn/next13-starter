@@ -9,6 +9,11 @@ class MyDocument extends Document {
 		return (
 			<Html lang={AppConfig.locale}>
 				<Head>
+					<link
+						href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"
+						rel="stylesheet"
+					/>
+
 					{/* // gtag */}
 					{gaIds?.length ? (
 						<>

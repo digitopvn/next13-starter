@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import { useRouter } from "next/router";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import type { FC } from "react";
 import React, { useEffect } from "react";
 
