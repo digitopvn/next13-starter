@@ -49,7 +49,7 @@ const PageLogin: FC<PageLoginProps> = ({ providers, ...props }: any) => {
 
 	const { data: profile } = api.user.getProfile.useQuery(
 		undefined, // no input
-		{ enabled: session?.user !== undefined }
+		{ enabled: !!session?.user }
 	);
 
 	const { onSignOut, onSignInFacebook, onSignInDiscord, onSignInGithub, onSignInGoogle, onSignInById } = useUser();

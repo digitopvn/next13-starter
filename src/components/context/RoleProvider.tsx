@@ -22,7 +22,7 @@ const RoleProvider: React.FC<IRoleProvider> = ({ children, roles }) => {
 
 	const { data: userRoles, refetch } = api.user.getRole.useQuery(
 		undefined, // no input
-		{ enabled: session?.user !== undefined }
+		{ enabled: !!session?.user }
 	);
 	useEffect(() => {
 		// effect

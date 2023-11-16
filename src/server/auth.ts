@@ -1,8 +1,10 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import axios from "axios";
 import { randomElement } from "diginext-utils/dist/array";
 import { randomStringAndNumberByLength } from "diginext-utils/dist/string/random";
 import { type GetServerSidePropsContext } from "next";
 import { type DefaultSession, getServerSession, type NextAuthOptions } from "next-auth";
+import type { Adapter, AdapterAccount, AdapterUser } from "next-auth/adapters";
 import type { Provider } from "next-auth/providers";
 import BattleNetProvider from "next-auth/providers/battlenet";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -37,6 +39,78 @@ declare module "next-auth" {
 	// }
 }
 
+const checkImageAlive = async (url: string) => {
+	//
+
+	try {
+		// Make a HEAD request to the URL
+		const response = await axios.head(url);
+		// If the status code is 200, the image is alive
+		if (response.status <= 400) return url;
+	} catch (error) {
+		// console.log("error :>> ", error);
+		// If there was an error (e.g., 404 or 500 status code), the image is not alive
+		// console.error("Error checking image:", error.message);
+	}
+
+	return randomUrlImage();
+};
+
+const CustomPrismaAdapter = (): Adapter => {
+	const defaultAdapter = PrismaAdapter(prisma);
+
+	return {
+		...defaultAdapter,
+
+		async linkAccount(_account: AdapterAccount) {
+			const newAccount = (await defaultAdapter?.linkAccount(_account)) as any;
+
+			// Fetch the account based on provider and providerAccountId
+			const account = await prisma.account.findFirst({
+				where: {
+					provider: newAccount.provider, // Use the correct field name as per your Prisma schema
+					providerAccountId: newAccount.providerAccountId,
+				},
+				include: {
+					user: true,
+				},
+			});
+
+			if (!account || !account.user) {
+				return null;
+			}
+
+			// Construct the user object in the format expected by NextAuth.js
+			const user = {
+				id: account.user.id.toString(), // Ensure the user ID is a string
+				name: account.user.name ?? "",
+				email: account.user.email ?? "",
+				image: account.user.image ?? "",
+				emailVerified: null,
+				// Add other fields as needed
+			};
+
+			const image = await checkImageAlive(account.user.image || "");
+			if (image !== account.user.image) {
+				await prisma.user.update({
+					where: { id: user.id },
+					data: {
+						image,
+					},
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						image: true,
+						emailVerified: true,
+					},
+				});
+			}
+
+			return newAccount;
+		},
+	};
+};
 const providers = [] as Provider[];
 if (env.NEXT_PUBLIC_DISCORD_CLIENT_ID) {
 	providers.push(
@@ -257,7 +331,8 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 
-	adapter: PrismaAdapter(prisma),
+	// adapter: PrismaAdapter(prisma),
+	adapter: CustomPrismaAdapter(),
 
 	providers,
 
