@@ -47,7 +47,7 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 		refetch,
 	} = api.user.getProfile.useQuery(
 		undefined, // no input
-		{ enabled: session?.user !== undefined }
+		{ enabled: !!session?.user }
 	);
 
 	const [isShowChildren, setIsShowChildren] = useState(

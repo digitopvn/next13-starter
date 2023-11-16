@@ -30,7 +30,7 @@ const httpPort = __env.PORT || 3000;
 // server.use(express.urlencoded({ extended: true }));
 // server.use(express.json());
 // server.use(bodyParser.json({ limit: '10mb' })); // Use this after the variable declaration
-server.use(cors()); // Use this after the variable declaration
+// server.use(cors()); // Use this after the variable declaration
 
 server.use(express.static(`${__dirname}/public`, { maxAge: "365d", redirect: false }));
 server.use(express.static(`${__dirname}/.next/static`, { maxAge: "365d", redirect: false }));

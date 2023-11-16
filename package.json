@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "npm run clean && npm run postinstall && concurrently \"npm run set-permission\" \"nodemon\" \"npm run node-server-dev\"",
 		"reset-db-local": "npx prisma db push --force-reset && npm run postinstall && npm run seed",
+		"prisma:push": "npx prisma db push",
 		"seed": "prisma db seed",
 		"node-server-dev": "node server.dev",
 		"build": "npm exec npm-run-all --sequential clean postinstall img build-next",
@@ -34,7 +35,7 @@
 		"postbuild": "next-sitemap"
 	},
 	"prisma": {
-		"seed": "ts-node -r tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+		"seed": "ts-node -r tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} prisma/seed.mjs"
 	},
 	"nodemonConfig": {
 		"watch": [
