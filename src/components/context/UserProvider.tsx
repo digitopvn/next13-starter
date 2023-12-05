@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { User } from "@prisma/client";
 import { toBool } from "diginext-utils/dist/object";
+import getStringFromNextJsRouter from "diginext-utils/dist/string/getStringFromNextJsRouter";
 import Timer from "diginext-utils/dist/Timer";
 import { useRouter } from "next/router";
 import type { SignInOptions, SignInResponse } from "next-auth/react";
@@ -33,7 +34,7 @@ export interface IUserProvider {
 const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }) => {
 	const router = useRouter();
 	const { query } = router;
-	const { urlCallback } = query;
+	const { callbackUrl } = query;
 
 	const { user, setUser, token, setToken, setIsLoading } = useStorage();
 
@@ -62,7 +63,7 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 		setToken(null);
 		setUser(undefined);
 
-		await signOut({ redirect: false });
+		await signOut();
 
 		setIsLoading(true);
 		let i = 0;
@@ -125,6 +126,17 @@ const UserProvider: React.FC<IUserProvider> = ({ children, isPrivate, ...props }
 
 		return () => {};
 	}, [JSON.stringify(profile)]);
+
+	useEffect(() => {
+		// effect
+
+		if (callbackUrl) {
+			router.push(decodeURIComponent(getStringFromNextJsRouter(callbackUrl)));
+		}
+		return () => {
+			// cleanup
+		};
+	}, [callbackUrl]);
 
 	if (status == "loading") return <></>;
 

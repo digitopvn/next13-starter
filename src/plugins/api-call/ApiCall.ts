@@ -33,7 +33,7 @@ const ApiCall = async ({
 	statusCode?: number;
 	data?: any;
 	status: boolean | string;
-	message?: string[] | string;
+	messages?: string[] | string;
 }> => {
 	if (baseUrlPath) url = `${process.env.NEXT_PUBLIC_BASE_URL}${baseUrlPath}`;
 	if (path) url = `${process.env.NEXT_PUBLIC_API_BASE_URL}${path}`;
@@ -122,7 +122,7 @@ const ApiCall = async ({
 			api = (e as any)?.response;
 		} else {
 			console.log("error api with", e);
-			const { code, message, name } = e;
+			const { code, messages, name } = e;
 			const response = {
 				data: (e as any)?.response?.data || "undefined",
 				status: (e as any)?.response?.status || "",
@@ -131,7 +131,7 @@ const ApiCall = async ({
 
 			error = {
 				code,
-				message,
+				messages,
 				name,
 				response,
 			};
@@ -153,7 +153,7 @@ const ApiCall = async ({
 		} else
 			api = {
 				status: false,
-				message: error?.message,
+				messages: error?.messages,
 			};
 	} else {
 		return api.data;

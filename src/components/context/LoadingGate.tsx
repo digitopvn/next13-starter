@@ -26,10 +26,6 @@ const LoadingGateProvider = ({ children, ...props }: any) => {
 						centered={true}
 						closable={false}
 						mask={true}
-						maskStyle={{
-							backgroundColor: "black",
-							opacity: 0.3,
-						}}
 						style={{
 							background: "none",
 						}}
