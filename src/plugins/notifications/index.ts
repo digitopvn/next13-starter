@@ -13,6 +13,13 @@ const showError = async (message: any) => {
 	});
 };
 
+const showInfo = async (message: any) => {
+	const { info } = (await import("antd")).notification;
+	info({
+		message,
+	});
+};
+
 const showNotifications = (messages: Array<any>, isError?: boolean) => {
 	if (isError) {
 		messages.forEach((message) => {
@@ -25,4 +32,4 @@ const showNotifications = (messages: Array<any>, isError?: boolean) => {
 	}
 };
 
-export { showError, showNotifications, showSuccess };
+export { showError, showInfo, showNotifications, showSuccess };

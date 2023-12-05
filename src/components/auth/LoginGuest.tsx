@@ -31,9 +31,7 @@ const LoginGuest = (props) => {
 
 	const onClickButton = async () => {
 		//
-		await onSignInById("guest-login", {
-			redirect: false,
-		});
+		await onSignInById("guest-login", {});
 
 		await Timer.wait(500);
 		listener.emit({

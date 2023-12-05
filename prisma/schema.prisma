@@ -47,6 +47,7 @@ model User {
     id                String     @id @default(auto()) @map("_id") @db.ObjectId
     providerAccountId String     @unique
     name              String?
+    password          String?
     email             String?
     emailOriginal     String?
     emailVerified     DateTime?
@@ -54,6 +55,14 @@ model User {
     sessions          Session[]
     Account           Account[]
     userRoles         UserRole[]
+    token             TokenApi?  @relation(fields: [tokenApiId], references: [id])
+    tokenApiId        String?    @db.ObjectId
+}
+
+model TokenApi {
+    id   String @id @default(auto()) @map("_id") @db.ObjectId
+    key  String @unique
+    User User[]
 }
 
 model Role {

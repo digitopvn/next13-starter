@@ -67,7 +67,7 @@ const AuthCenterLayout = ({
 				checkLoginFirst,
 			}}
 		>
-			<div className="flex h-full flex-col items-center justify-center gap-2 p-4 dark:text-white">
+			<div className="flex h-full flex-col items-center justify-center gap-2 p-4 text-white">
 				{status == "unauthenticated" ? button : <UserAvatar data={user} />}
 
 				{router.asPath.split("/").filter((x) => x).length > 1 ? (
@@ -92,8 +92,6 @@ const AuthCenterLayout = ({
 		</AuthCenterContext.Provider>
 	);
 };
-
-AuthCenterLayout.propTypes = {};
 
 export default AuthCenterLayout;
 

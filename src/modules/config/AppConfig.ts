@@ -1,6 +1,10 @@
 // FIXME: Update this configuration file based on your project information
 
 import { toBool } from "diginext-utils/dist/object";
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+const { name } = publicRuntimeConfig;
 
 export const Environment = {
 	PRODUCTION: "production",
@@ -25,6 +29,8 @@ export const AppConfig = {
 	title: "Digitop",
 	description: "Starter",
 
+	name,
+
 	getBaseUrl: (url = "") => {
 		return process.env.NEXT_PUBLIC_BASE_URL ? `${process.env.NEXT_PUBLIC_BASE_URL}${url}` : url;
 	},
@@ -37,6 +43,9 @@ export const AppConfig = {
 		return process.env.NEXT_PUBLIC_CDN_ROOT
 			? `${process.env.NEXT_PUBLIC_CDN_ROOT}${process.env.NEXT_PUBLIC_VERSION_CDN}${url}`
 			: url;
+	},
+	getApiUploadStorage: (url = "") => {
+		return process.env.NEXT_PUBLIC_API_UPLOAD_STORAGE ? `${process.env.NEXT_PUBLIC_API_UPLOAD_STORAGE}${url}` : url;
 	},
 };
 

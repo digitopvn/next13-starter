@@ -74,7 +74,7 @@ const ApiProvider = (props: any) => {
 			}
 
 			try {
-				const msgs = toArray(res.message as any);
+				const msgs = toArray(res.messages as any);
 				const isError = !toBool(res?.status as any);
 
 				// show error notification even if it's disabled
@@ -92,7 +92,7 @@ const ApiProvider = (props: any) => {
 			console.warn("Vui lòng kiểm tra lại thông tin!");
 			res = {
 				status: false,
-				message: "Vui lòng kiểm tra lại thông tin!",
+				messages: "Vui lòng kiểm tra lại thông tin!",
 			};
 		}
 

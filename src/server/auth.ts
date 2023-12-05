@@ -15,6 +15,8 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "@/env.mjs";
 import { AppConfig } from "@/modules/config/AppConfig";
+import ApiCall from "@/plugins/api-call/ApiCall";
+import generateHmacAuth from "@/plugins/crypto/generateHmacAuth";
 import randomUrlImage from "@/plugins/utils/randomUrlImage";
 import { prisma } from "@/server/db";
 
@@ -33,9 +35,11 @@ declare module "next-auth" {
 		};
 	}
 
-	// interface User {
-	//   // ...other properties
-	//   // role: UserRole;
+	// interface User extends UserDefault {
+	// 	// ...other properties
+	// 	// role: UserRole;
+	// 	emailOriginal?: string;
+	// 	providerAccountId: string;
 	// }
 }
 
@@ -56,61 +60,6 @@ const checkImageAlive = async (url: string) => {
 	return randomUrlImage();
 };
 
-const CustomPrismaAdapter = (): Adapter => {
-	const defaultAdapter = PrismaAdapter(prisma);
-
-	return {
-		...defaultAdapter,
-
-		async linkAccount(_account: AdapterAccount) {
-			const newAccount = (await defaultAdapter?.linkAccount(_account)) as any;
-
-			// Fetch the account based on provider and providerAccountId
-			const account = await prisma.account.findFirst({
-				where: {
-					provider: newAccount.provider, // Use the correct field name as per your Prisma schema
-					providerAccountId: newAccount.providerAccountId,
-				},
-				include: {
-					user: true,
-				},
-			});
-
-			if (!account || !account.user) {
-				return null;
-			}
-
-			// Construct the user object in the format expected by NextAuth.js
-			const user = {
-				id: account.user.id.toString(), // Ensure the user ID is a string
-				name: account.user.name ?? "",
-				email: account.user.email ?? "",
-				image: account.user.image ?? "",
-				emailVerified: null,
-				// Add other fields as needed
-			};
-
-			const image = await checkImageAlive(account.user.image || "");
-			if (image !== account.user.image) {
-				await prisma.user.update({
-					where: { id: user.id },
-					data: {
-						image,
-					},
-					select: {
-						id: true,
-						name: true,
-						email: true,
-						image: true,
-						emailVerified: true,
-					},
-				});
-			}
-
-			return newAccount;
-		},
-	};
-};
 const providers = [] as Provider[];
 if (env.NEXT_PUBLIC_DISCORD_CLIENT_ID) {
 	providers.push(
@@ -214,13 +163,34 @@ providers.push(
 	CredentialsProvider({
 		id: "domain-login",
 		name: "Domain Account",
-		async authorize(credentials, req) {
-			//
+		async authorize(input, req) {
+			if (!input || !input.email || !input.password) {
+				throw new Error("Missing credentials!");
+			}
+			const user = await prisma.user.findFirst({
+				where: {
+					email: input.email,
+				},
+			});
 
-			throw new Error("Lỗi cmnr !");
+			if (!user) {
+				throw new Error("Invalid email!");
+			}
+
+			console.log("user :>> ", user);
+
+			const passCrypt = generateHmacAuth(input.password);
+
+			// Check if the hashed password matches the provided password
+			const isPasswordValid = passCrypt == user.password;
+			if (!isPasswordValid) {
+				throw new Error("Invalid password!");
+			}
+			//
+			return user;
 		},
 		credentials: {
-			username: { label: "Username", type: "text ", placeholder: "jsmith" },
+			email: { label: "Email", type: "text" },
 			password: { label: "Password", type: "password" },
 		},
 	})
@@ -319,11 +289,64 @@ export const authOptions: NextAuthOptions = {
 		},
 		async createUser(message) {
 			/* user created */
+			// const user = message.user as any;
+			// (async () => {
+			// 	//create token api
+			// 	const result = await ApiCall({
+			// 		method: "POST",
+			// 		url: AppConfig.getApiUploadStorage("/v3/auth/create-token"),
+			// 		data: {
+			// 			user: {
+			// 				id: user.id,
+			// 				name: user.name,
+			// 				email: user.email || user.emailOriginal,
+			// 				providerAccountId: user.providerAccountId,
+			// 			},
+			// 		},
+			// 		contentType: "json",
+			// 	});
+			// 	if (result.status) {
+			// 		const { data } = result;
+			// 		if (data.token?.key) {
+			// 			const updatedUser = await prisma.user.update({
+			// 				where: { id: user.id },
+			// 				data: {
+			// 					token: {
+			// 						create: {
+			// 							key: data.token?.key,
+			// 						},
+			// 					},
+			// 				},
+			// 				select: { token: true },
+			// 			});
+			// 		}
+			// 		// if (!data) return;
+			// 	}
+			// })();
 		},
 		async updateUser(message) {
 			/* user updated - e.g. their email was verified */
 		},
 		async linkAccount(message) {
+			const { user } = message;
+
+			const image = await checkImageAlive(user.image || "");
+			if (image !== user.image) {
+				await prisma.user.update({
+					where: { id: user.id },
+					data: {
+						image,
+					},
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						image: true,
+						emailVerified: true,
+					},
+				});
+			}
+
 			/* account (e.g. Twitter) linked to a user */
 		},
 		async session(message) {
@@ -331,8 +354,8 @@ export const authOptions: NextAuthOptions = {
 		},
 	},
 
-	// adapter: PrismaAdapter(prisma),
-	adapter: CustomPrismaAdapter(),
+	adapter: PrismaAdapter(prisma),
+	// adapter: CustomPrismaAdapter(),
 
 	providers,
 

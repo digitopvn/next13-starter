@@ -12,15 +12,19 @@ const transpilePackages = [
 	// "three",
 ];
 
-const { version } = require("./package.json");
+const { version, name } = require("./package.json");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	experimental: {
+		forceSwcTransforms: true,
+	},
 	eslint: {
 		dirs: ["*"],
 	},
 	publicRuntimeConfig: {
 		version,
+		name,
 	},
 	poweredByHeader: false,
 	trailingSlash: true,
