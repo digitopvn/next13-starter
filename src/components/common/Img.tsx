@@ -4,6 +4,14 @@ import React, { useEffect, useState } from "react";
 import asset from "@/plugins/asset";
 import loadImageAsBlobUrl from "@/plugins/utils/loadImageAsBlobUrl";
 
+interface ImageData {
+	img: string;
+	width: number;
+	height: number;
+}
+
+const CACHED: Record<string, ImageData> = {};
+
 function getImageDimensions(file): Promise<{ width: number; height: number }> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
@@ -31,9 +39,23 @@ const Img = ({ src, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
 
 	useEffect(() => {
 		// effect
+		setImgSrc(asset("/assets/images-webp/logo-icon.svg"));
+		setWidth(64);
+		setHeight(64);
 
 		(async () => {
 			if (!src) return;
+
+			if (CACHED[src]) {
+				const cache = CACHED[src];
+				if (cache) {
+					setImgSrc(cache.img);
+					setWidth(cache.width);
+					setHeight(cache.height);
+					return;
+				}
+			}
+
 			const res = await loadImageAsBlobUrl(src);
 			if (res) {
 				setImgSrc(res);
@@ -44,12 +66,36 @@ const Img = ({ src, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
 						setWidth(dimensions.width);
 						setHeight(dimensions.height);
 					}
+
+					CACHED[src] = {
+						img: res,
+						width: dimensions.width,
+						height: dimensions.height,
+					};
 				})();
+
+				return;
 			}
 		})();
 	}, [src]);
 
-	return <>{imgSrc ? <img alt="" width={width} height={height} {...props} src={imgSrc} /> : <></>}</>;
+	return (
+		<>
+			{imgSrc ? (
+				<>
+					<style jsx>{`
+						img {
+							object-fit: contain;
+						}
+					`}</style>
+
+					<img alt="" width={width} height={height} {...props} src={imgSrc} />
+				</>
+			) : (
+				<></>
+			)}
+		</>
+	);
 };
 
 export default Img;
