@@ -4,52 +4,69 @@ import React, { useEffect, useState } from "react";
 import asset from "@/plugins/asset";
 import loadImageAsBlobUrl from "@/plugins/utils/loadImageAsBlobUrl";
 
-function getImageDimensions(file): Promise<{ width: number; height: number }> {
+interface ImageData {
+	img: string;
+	width: number;
+	height: number;
+}
+
+const CACHED: Record<string, ImageData> = {};
+
+function getImageDimensions(file: string): Promise<{ width: number; height: number }> {
 	return new Promise((resolve, reject) => {
 		const img = new Image();
-
-		// Set up event listeners to return the dimensions
-		img.onload = function () {
-			resolve({
-				width: img.width,
-				height: img.height,
-			});
-		};
-
+		img.onload = () => resolve({ width: img.width, height: img.height });
 		img.onerror = reject;
-
-		// Start loading the image
 		img.src = file;
 	});
 }
 
-const Img = ({ src, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
-	const [imgSrc, setImgSrc] = useState(asset("/assets/images-webp/logo-icon.svg"));
+async function fetchImage(src: string): Promise<ImageData> {
+	if (CACHED[src]) {
+		return CACHED[src] as ImageData;
+	}
 
+	const blobUrl = await loadImageAsBlobUrl(src);
+	if (!blobUrl) throw new Error("Failed to load image");
+
+	const dimensions = await getImageDimensions(blobUrl);
+	const imageData = { img: blobUrl, ...dimensions };
+
+	CACHED[src] = imageData;
+	return imageData;
+}
+
+const Img: React.FC<ImgHTMLAttributes<HTMLImageElement>> = ({ src, ...props }) => {
+	const [imgSrc, setImgSrc] = useState(asset("/assets/images-webp/logo-icon.svg"));
 	const [width, setWidth] = useState(64);
 	const [height, setHeight] = useState(64);
 
 	useEffect(() => {
-		// effect
+		if (!src) return;
 
-		(async () => {
-			if (!src) return;
-			const res = await loadImageAsBlobUrl(src);
-			if (res) {
-				setImgSrc(res);
+		setImgSrc(asset("/assets/images-webp/logo-icon.svg"));
+		setWidth(64);
+		setHeight(64);
 
-				(async () => {
-					const dimensions = await getImageDimensions(res);
-					if (dimensions) {
-						setWidth(dimensions.width);
-						setHeight(dimensions.height);
-					}
-				})();
-			}
-		})();
+		fetchImage(src)
+			.then(({ img, width: _width, height: _height }) => {
+				setImgSrc(img);
+				setWidth(_width);
+				setHeight(_height);
+			})
+			.catch(console.error); // Add better error handling as needed
 	}, [src]);
 
-	return <>{imgSrc ? <img alt="" width={width} height={height} {...props} src={imgSrc} /> : <></>}</>;
+	return imgSrc ? (
+		<>
+			<style jsx>{`
+				img {
+					object-fit: contain;
+				}
+			`}</style>
+			<img alt="" width={width} height={height} {...props} src={imgSrc} />
+		</>
+	) : null;
 };
 
 export default Img;
